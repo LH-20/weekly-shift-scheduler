@@ -1397,6 +1397,11 @@ $('print').classList.toggle(
   !scheduleToDraw || showingDraft
 );
 
+$('print').onclick = () => {
+  alert('Butoni Printo po funksionon.');
+  window.print();
+};
+
 // CSV shfaqet vetëm për ekipin
 $('csv').classList.toggle(
   'hidden',
@@ -1458,6 +1463,7 @@ $('scheduleSetup').classList.toggle('hidden', !isManager);
   }
 
   
+
 function syncPublishedView() {
   const published = Array.isArray(result) && result.length === 7;
 
@@ -1473,7 +1479,19 @@ function syncPublishedView() {
 
   // Përditëso butonat sa herë që sinkronizohet pamja
   drawSchedule();
+
+  // Regjistro veprimin e printimit vetëm një herë
+ const printButton = $('print');
+
+if (printButton && !printButton.dataset.printBound) {
+  printButton.dataset.printBound = 'true';
+
+  printButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.print();
+  });
 }
+
 
   
 function show(view) {
@@ -1870,7 +1888,17 @@ $('managerStatus').textContent = 'Je i kyçur si menaxher.';
     }
   });
 
-  $('print').addEventListener('click',()=>window.print());
+  $('print').addEventListener('click', (event) => {
+  event.preventDefault();
+  window.print();
+});
+  try {
+    window.print();
+  } catch (error) {
+    console.error('Gabim gjatë printimit:', error);
+    setStatus('Printimi nuk mund të hapet në këtë pajisje.', false);
+  }
+});
 
   $('csv').addEventListener('click',()=>{
     if (!result) {
