@@ -1,8 +1,7 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://lh-20.github.io/weekly-shift-scheduler/ -->
+<html lang="sq"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<!doctype html>
-<html lang="sq">
-<head>
-<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Orari javor i ndërrimeve</title>
 
@@ -858,8 +857,8 @@
     <h1>Orari javor i ndërrimeve</h1>
     <p>E hënë – E diel · 3 ndërrime në ditë</p>
     <div class="status" id="connectionStatus">
-      <span class="dot" id="statusDot"></span>
-      <span id="statusText">Duke u lidhur me orarin e përbashkët...</span>
+      <span class="dot live" id="statusDot"></span>
+      <span id="statusText">Lidhja u krye · përditësimet e drejtpërdrejta janë aktive</span>
     </div>
   </div>
 </header>
@@ -928,13 +927,13 @@
       <h2>Disponueshmëria e ekipit</h2>
       <p class="hint">Kliko një kuti për të shënuar disponueshmërinë. Kutia bosh do të thotë se nuk je i disponueshëm.</p>
     </div>
-    <button class="btn" id="clear" disabled>Pastro shënimet</button>
+    <button class="btn" id="clear" disabled="">Pastro shënimet</button>
   </div>
 
   <div class="scroll">
     <table class="avail">
-      <thead id="ah"></thead>
-      <tbody id="ab"></tbody>
+      <thead id="ah"><tr><th>Dita</th><th>Ndërrimi</th><th><span>Ardina</span></th><th><span>Drilon</span></th><th><span>Ermal</span></th><th><span>Iris</span></th><th><span>Luljeta</span></th><th><span>Valdrin</span></th></tr></thead>
+      <tbody id="ab"><tr><td rowspan="3">E hënë</td><td>10:00–14:00</td><td><button class="mark on" data-p="0" data-d="0" data-s="0" aria-label="Ardina E hënë 10:00–14:00" aria-pressed="true">✓</button></td><td><button class="mark " data-p="1" data-d="0" data-s="0" aria-label="Drilon E hënë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="0" data-s="0" aria-label="Ermal E hënë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="0" data-s="0" aria-label="Iris E hënë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="0" data-s="0" aria-label="Luljeta E hënë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="0" data-s="0" aria-label="Valdrin E hënë 10:00–14:00" aria-pressed="false"></button></td></tr><tr><td>14:00–18:00</td><td><button class="mark " data-p="0" data-d="0" data-s="1" aria-label="Ardina E hënë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="0" data-s="1" aria-label="Drilon E hënë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="0" data-s="1" aria-label="Ermal E hënë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="0" data-s="1" aria-label="Iris E hënë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="0" data-s="1" aria-label="Luljeta E hënë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="0" data-s="1" aria-label="Valdrin E hënë 14:00–18:00" aria-pressed="false"></button></td></tr><tr><td>18:00–22:00</td><td><button class="mark " data-p="0" data-d="0" data-s="2" aria-label="Ardina E hënë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark on" data-p="1" data-d="0" data-s="2" aria-label="Drilon E hënë 18:00–22:00" aria-pressed="true">✓</button></td><td><button class="mark " data-p="2" data-d="0" data-s="2" aria-label="Ermal E hënë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="0" data-s="2" aria-label="Iris E hënë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="0" data-s="2" aria-label="Luljeta E hënë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="0" data-s="2" aria-label="Valdrin E hënë 18:00–22:00" aria-pressed="false"></button></td></tr><tr><td rowspan="3">E martë</td><td>10:00–14:00</td><td><button class="mark " data-p="0" data-d="1" data-s="0" aria-label="Ardina E martë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="1" data-s="0" aria-label="Drilon E martë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="1" data-s="0" aria-label="Ermal E martë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="1" data-s="0" aria-label="Iris E martë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="1" data-s="0" aria-label="Luljeta E martë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="1" data-s="0" aria-label="Valdrin E martë 10:00–14:00" aria-pressed="false"></button></td></tr><tr><td>14:00–18:00</td><td><button class="mark " data-p="0" data-d="1" data-s="1" aria-label="Ardina E martë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="1" data-s="1" aria-label="Drilon E martë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark on" data-p="2" data-d="1" data-s="1" aria-label="Ermal E martë 14:00–18:00" aria-pressed="true">✓</button></td><td><button class="mark " data-p="3" data-d="1" data-s="1" aria-label="Iris E martë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="1" data-s="1" aria-label="Luljeta E martë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="1" data-s="1" aria-label="Valdrin E martë 14:00–18:00" aria-pressed="false"></button></td></tr><tr><td>18:00–22:00</td><td><button class="mark " data-p="0" data-d="1" data-s="2" aria-label="Ardina E martë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="1" data-s="2" aria-label="Drilon E martë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="1" data-s="2" aria-label="Ermal E martë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="1" data-s="2" aria-label="Iris E martë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="1" data-s="2" aria-label="Luljeta E martë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="1" data-s="2" aria-label="Valdrin E martë 18:00–22:00" aria-pressed="false"></button></td></tr><tr><td rowspan="3">E mërkurë</td><td>10:00–14:00</td><td><button class="mark " data-p="0" data-d="2" data-s="0" aria-label="Ardina E mërkurë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="2" data-s="0" aria-label="Drilon E mërkurë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="2" data-s="0" aria-label="Ermal E mërkurë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="2" data-s="0" aria-label="Iris E mërkurë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="2" data-s="0" aria-label="Luljeta E mërkurë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="2" data-s="0" aria-label="Valdrin E mërkurë 10:00–14:00" aria-pressed="false"></button></td></tr><tr><td>14:00–18:00</td><td><button class="mark " data-p="0" data-d="2" data-s="1" aria-label="Ardina E mërkurë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="2" data-s="1" aria-label="Drilon E mërkurë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="2" data-s="1" aria-label="Ermal E mërkurë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="2" data-s="1" aria-label="Iris E mërkurë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="2" data-s="1" aria-label="Luljeta E mërkurë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="2" data-s="1" aria-label="Valdrin E mërkurë 14:00–18:00" aria-pressed="false"></button></td></tr><tr><td>18:00–22:00</td><td><button class="mark " data-p="0" data-d="2" data-s="2" aria-label="Ardina E mërkurë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="2" data-s="2" aria-label="Drilon E mërkurë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="2" data-s="2" aria-label="Ermal E mërkurë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="2" data-s="2" aria-label="Iris E mërkurë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="2" data-s="2" aria-label="Luljeta E mërkurë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="2" data-s="2" aria-label="Valdrin E mërkurë 18:00–22:00" aria-pressed="false"></button></td></tr><tr><td rowspan="3">E enjte</td><td>10:00–14:00</td><td><button class="mark " data-p="0" data-d="3" data-s="0" aria-label="Ardina E enjte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="3" data-s="0" aria-label="Drilon E enjte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="3" data-s="0" aria-label="Ermal E enjte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="3" data-s="0" aria-label="Iris E enjte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="3" data-s="0" aria-label="Luljeta E enjte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="3" data-s="0" aria-label="Valdrin E enjte 10:00–14:00" aria-pressed="false"></button></td></tr><tr><td>14:00–18:00</td><td><button class="mark " data-p="0" data-d="3" data-s="1" aria-label="Ardina E enjte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="3" data-s="1" aria-label="Drilon E enjte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="3" data-s="1" aria-label="Ermal E enjte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="3" data-s="1" aria-label="Iris E enjte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="3" data-s="1" aria-label="Luljeta E enjte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="3" data-s="1" aria-label="Valdrin E enjte 14:00–18:00" aria-pressed="false"></button></td></tr><tr><td>18:00–22:00</td><td><button class="mark " data-p="0" data-d="3" data-s="2" aria-label="Ardina E enjte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="3" data-s="2" aria-label="Drilon E enjte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="3" data-s="2" aria-label="Ermal E enjte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="3" data-s="2" aria-label="Iris E enjte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="3" data-s="2" aria-label="Luljeta E enjte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="3" data-s="2" aria-label="Valdrin E enjte 18:00–22:00" aria-pressed="false"></button></td></tr><tr><td rowspan="3">E premte</td><td>10:00–14:00</td><td><button class="mark " data-p="0" data-d="4" data-s="0" aria-label="Ardina E premte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="4" data-s="0" aria-label="Drilon E premte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="4" data-s="0" aria-label="Ermal E premte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="4" data-s="0" aria-label="Iris E premte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="4" data-s="0" aria-label="Luljeta E premte 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="4" data-s="0" aria-label="Valdrin E premte 10:00–14:00" aria-pressed="false"></button></td></tr><tr><td>14:00–18:00</td><td><button class="mark " data-p="0" data-d="4" data-s="1" aria-label="Ardina E premte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="4" data-s="1" aria-label="Drilon E premte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="4" data-s="1" aria-label="Ermal E premte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="4" data-s="1" aria-label="Iris E premte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="4" data-s="1" aria-label="Luljeta E premte 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="4" data-s="1" aria-label="Valdrin E premte 14:00–18:00" aria-pressed="false"></button></td></tr><tr><td>18:00–22:00</td><td><button class="mark " data-p="0" data-d="4" data-s="2" aria-label="Ardina E premte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="4" data-s="2" aria-label="Drilon E premte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="4" data-s="2" aria-label="Ermal E premte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="4" data-s="2" aria-label="Iris E premte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="4" data-s="2" aria-label="Luljeta E premte 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="4" data-s="2" aria-label="Valdrin E premte 18:00–22:00" aria-pressed="false"></button></td></tr><tr><td rowspan="3">E shtunë</td><td>10:00–14:00</td><td><button class="mark " data-p="0" data-d="5" data-s="0" aria-label="Ardina E shtunë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="5" data-s="0" aria-label="Drilon E shtunë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="5" data-s="0" aria-label="Ermal E shtunë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="5" data-s="0" aria-label="Iris E shtunë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="5" data-s="0" aria-label="Luljeta E shtunë 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="5" data-s="0" aria-label="Valdrin E shtunë 10:00–14:00" aria-pressed="false"></button></td></tr><tr><td>14:00–18:00</td><td><button class="mark " data-p="0" data-d="5" data-s="1" aria-label="Ardina E shtunë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="5" data-s="1" aria-label="Drilon E shtunë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="5" data-s="1" aria-label="Ermal E shtunë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="5" data-s="1" aria-label="Iris E shtunë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="5" data-s="1" aria-label="Luljeta E shtunë 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="5" data-s="1" aria-label="Valdrin E shtunë 14:00–18:00" aria-pressed="false"></button></td></tr><tr><td>18:00–22:00</td><td><button class="mark " data-p="0" data-d="5" data-s="2" aria-label="Ardina E shtunë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="5" data-s="2" aria-label="Drilon E shtunë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="5" data-s="2" aria-label="Ermal E shtunë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="5" data-s="2" aria-label="Iris E shtunë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="5" data-s="2" aria-label="Luljeta E shtunë 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="5" data-s="2" aria-label="Valdrin E shtunë 18:00–22:00" aria-pressed="false"></button></td></tr><tr><td rowspan="3">E diel</td><td>10:00–14:00</td><td><button class="mark " data-p="0" data-d="6" data-s="0" aria-label="Ardina E diel 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="6" data-s="0" aria-label="Drilon E diel 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="6" data-s="0" aria-label="Ermal E diel 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="6" data-s="0" aria-label="Iris E diel 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="6" data-s="0" aria-label="Luljeta E diel 10:00–14:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="6" data-s="0" aria-label="Valdrin E diel 10:00–14:00" aria-pressed="false"></button></td></tr><tr><td>14:00–18:00</td><td><button class="mark " data-p="0" data-d="6" data-s="1" aria-label="Ardina E diel 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="6" data-s="1" aria-label="Drilon E diel 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="6" data-s="1" aria-label="Ermal E diel 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="6" data-s="1" aria-label="Iris E diel 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="6" data-s="1" aria-label="Luljeta E diel 14:00–18:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="6" data-s="1" aria-label="Valdrin E diel 14:00–18:00" aria-pressed="false"></button></td></tr><tr><td>18:00–22:00</td><td><button class="mark " data-p="0" data-d="6" data-s="2" aria-label="Ardina E diel 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="1" data-d="6" data-s="2" aria-label="Drilon E diel 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="2" data-d="6" data-s="2" aria-label="Ermal E diel 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="3" data-d="6" data-s="2" aria-label="Iris E diel 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="4" data-d="6" data-s="2" aria-label="Luljeta E diel 18:00–22:00" aria-pressed="false"></button></td><td><button class="mark " data-p="5" data-d="6" data-s="2" aria-label="Valdrin E diel 18:00–22:00" aria-pressed="false"></button></td></tr></tbody>
     </table>
   </div>
 
@@ -951,9 +950,9 @@
   </div>
 
   <div class="actions">
-    <button class="btn primary" id="make" disabled>Gjenero orarin për kontrollim</button>
+    <button class="btn primary" id="make" disabled="">Gjenero orarin për kontrollim</button>
   </div>
-  <p class="message" id="availabilityMsg">Duke u lidhur...</p>
+  <p class="message ok" id="availabilityMsg">Disponueshmëria u ngarkua. Ruajtja e fundit: 10/24/2026, 12:37:43 AM.</p>
 
 
 </div>
@@ -967,13 +966,13 @@
   <div class="panelhead">
     <div>
       <h2>Orari javor</h2>
-      <p class="hint" id="scheduleSubtitle">Orari i publikuar dhe i dukshëm për të gjithë.</p>
+      <p class="hint" id="scheduleSubtitle">Ky është orari zyrtar i publikuar dhe i dukshëm për të gjithë.</p>
     </div>
     <span class="schedule-state published-state" id="scheduleState">Orari i publikuar</span>
   </div>
 
-  <h3 class="shop-title" id="publishedShopName"></h3>
-  <p class="schedule-period" id="publishedWeekPeriod"></p>
+  <h3 class="shop-title" id="publishedShopName">Petville</h3>
+  <p class="schedule-period" id="publishedWeekPeriod">Java: 19/10/2026 – 25/10/2026</p>
 
   <div class="scroll">
     <table class="schedule">
@@ -986,21 +985,21 @@
           <th>18:00–22:00</th>
         </tr>
       </thead>
-      <tbody id="sb"></tbody>
+      <tbody id="sb"><tr><td colspan="5" class="empty">Nuk është publikuar ende asnjë orar.</td></tr></tbody>
     </table>
   </div>
 
-  <p class="message" id="msg">Nuk është publikuar ende asnjë orar.</p>
+  <p class="message" id="msg">Ky seksion do të shfaqë orarin pasi menaxheri ta gjenerojë dhe ta publikojë.</p>
 
   <div class="actions manager-only hidden" id="draftActions">
     <button class="btn primary" id="publishDraft" type="button">Publiko orarin e kontrolluar</button>
-    <button class="btn" id="regenerateDraft" type="button">Gjenero përsëri</button>
+    <button class="btn hidden" id="regenerateDraft" type="button">Gjenero përsëri</button>
     <button class="btn" id="returnToAvailability" type="button">Kthehu te disponueshmëria</button>
   </div>
 
   <div class="actions">
-    <button class="btn" id="print">Printo orarin</button>
-    <button class="btn" id="csv">Eksporto në CSV</button>
+    <button class="btn hidden" id="print">Printo orarin</button>
+    <button class="btn hidden" id="csv">Eksporto në CSV</button>
     <button class="btn manager-only hidden" id="newWeek">Hap javën e re</button>
     <button class="btn manager-only hidden" id="editSchedule" type="button">Kontrollo disponueshmërinë</button>
   </div>
@@ -1009,7 +1008,7 @@
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./Orari javor i ndërrimeve_files/supabase-js@2"></script>
 <script>
 (() => {
   // Konfigurimi i projektit Supabase.
@@ -1970,5 +1969,5 @@ syncPublishedView();
   init();
 })();
 </script>
-</body>
-</html>
+
+</body></html>
