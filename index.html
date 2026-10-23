@@ -733,120 +733,138 @@
     margin: 12mm;
   }
 
-  @media print {
-    body {
-      background: #fff !important;
-      color: #111 !important;
-      font-size: 11pt;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-
-    body * {
-      visibility: hidden !important;
-    }
-
-    #schedule,
-    #schedule * {
-      visibility: visible !important;
-    }
-
-    #schedule {
-      display: block !important;
-      position: absolute !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100% !important;
-      max-width: none !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-      background: #fff !important;
-    }
-
-    #schedule .panelhead .btn,
-    #schedule .actions,
-    #schedule .schedule-state,
-    #schedule .message,
-    #schedule .hint {
-      display: none !important;
-    }
-
-    #schedule .shop-title {
-      margin: 0 0 5px !important;
-      color: #111 !important;
-      font-size: 22pt !important;
-    }
-
-    #schedule .schedule-period {
-      margin: 0 0 14px !important;
-      padding-bottom: 8px !important;
-      border-bottom: 1px solid #999 !important;
-      color: #333 !important;
-      font-size: 11pt !important;
-    }
-
-    #schedule .scroll {
-      width: 100% !important;
-      max-width: none !important;
-      overflow: visible !important;
-      border: 1px solid #999 !important;
-      border-radius: 0 !important;
-    }
-
-    #schedule .schedule {
-      width: 100% !important;
-      min-width: 0 !important;
-      table-layout: fixed !important;
-      border-collapse: collapse !important;
-      font-size: 10pt !important;
-    }
-
-    #schedule .schedule th,
-    #schedule .schedule td {
-      padding: 8px !important;
-      border: 1px solid #bbb !important;
-      color: #111 !important;
-      overflow-wrap: break-word !important;
-    }
-
-    #schedule .schedule th {
-      background: #eaf0eb !important;
-      font-size: 10pt !important;
-    }
-
-    #schedule .schedule td {
-      height: auto !important;
-      min-height: 0 !important;
-      background: #fff !important;
-    }
-
-    #schedule .schedule small {
-      color: #444 !important;
-      font-size: 9pt !important;
-    }
-
-    #schedule .uncovered {
-      color: #111 !important;
-    }
-
-    #schedule .schedule tr {
-      break-inside: avoid;
-      page-break-inside: avoid;
-    }
-
-    html,
-    body,
-    .wrap {
-      width: 100% !important;
-      max-width: none !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      overflow: visible !important;
-    }
+  
+@media print {
+  @page {
+    size: auto;
+    margin: 10mm;
   }
+
+  html,
+  body {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #111 !important;
+    font-size: 11pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #schedule,
+  #schedule * {
+    visibility: visible !important;
+  }
+
+  #schedule {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    background: #fff !important;
+    transform: none !important;
+  }
+
+  #schedule .panelhead .btn,
+  #schedule .actions,
+  #schedule .schedule-state,
+  #schedule .message,
+  #schedule .hint {
+    display: none !important;
+  }
+
+  #schedule .shop-title {
+    margin: 0 0 5px !important;
+    color: #111 !important;
+    font-size: 22pt !important;
+  }
+
+  #schedule .schedule-period {
+    margin: 0 0 14px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid #999 !important;
+    color: #333 !important;
+    font-size: 11pt !important;
+  }
+
+  #schedule .scroll {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 1px solid #999 !important;
+    border-radius: 0 !important;
+  }
+
+  #schedule .schedule {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    font-size: 10pt !important;
+  }
+
+  #schedule .schedule th,
+  #schedule .schedule td {
+    padding: 6px !important;
+    border: 1px solid #bbb !important;
+    color: #111 !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    white-space: normal !important;
+  }
+
+  #schedule .schedule th {
+    background: #eaf0eb !important;
+    font-size: 10pt !important;
+  }
+
+  #schedule .schedule td {
+    height: auto !important;
+    min-height: 0 !important;
+    background: #fff !important;
+  }
+
+  #schedule .schedule small {
+    color: #444 !important;
+    font-size: 9pt !important;
+  }
+
+  #schedule .uncovered {
+    color: #111 !important;
+  }
+
+  #schedule .schedule tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .wrap {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+}
+
 </style>
 
 </head>
