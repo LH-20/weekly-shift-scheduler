@@ -1,399 +1,1973 @@
+
 <!doctype html>
-<html lang="en">
+<html lang="sq">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Weekly Shift Schedule</title>
+<title>Orari javor i ndërrimeve</title>
+
 <style>
-:root{--green:#26734d;--pale:#e9f5ed;--ink:#202923;--muted:#68736c;--line:#e3e9e4;--bg:#f7f9f7}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif}
-.wrap{max-width:1100px;margin:0 auto;padding:28px 18px 48px}
-header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}
-h1{font-size:28px;letter-spacing:-.7px;margin:0}header p{color:var(--muted);margin:5px 0 0}
-.tabs{display:flex;gap:8px;margin:20px 0 14px}.tab,button{font:inherit;cursor:pointer}
-.tab{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 14px;color:var(--muted);font-weight:650}
-.tab.active{background:var(--green);border-color:var(--green);color:#fff}
-.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:17px;margin-bottom:14px}
-.panelhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-h2{font-size:17px;margin:0}.hint{font-size:12px;color:var(--muted);margin:4px 0 0}
-.scroll{overflow-x:auto;max-width:100%;border:1px solid var(--line);border-radius:9px;-webkit-overflow-scrolling:touch}
-.avail{border-collapse:separate;border-spacing:0;width:100%;min-width:760px;table-layout:fixed}
-.avail th,.avail td{padding:8px 4px;border-bottom:1px solid var(--line);border-right:1px solid #edf1ed;text-align:center;overflow-wrap:anywhere}
-.avail th{background:#f3f6f3;color:#536159;font-size:11px;font-weight:700;white-space:nowrap}
-.avail thead tr:first-child th{background:#eaf0eb;color:#34483b;font-size:12px;padding:11px 6px}
-.avail tbody tr:nth-child(even) td{background:#fbfcfb}.avail tbody tr:hover td{background:#f3f8f4}
-.avail th:first-child,.avail td:first-child{border-right:1px solid #dce5de;width:75px}
-.avail th:nth-child(2),.avail td:nth-child(2){width:95px}
-.avail td{height:48px}.avail th:first-child,.avail td:first-child{background:#f5f8f5;text-align:left;font-weight:650}
-.avail tr:last-child td{border-bottom:0}.avail th:last-child,.avail td:last-child{border-right:0}
-.name{width:100%;min-width:0;border:1px solid transparent;border-radius:6px;padding:6px 2px;background:transparent;font-size:12px;text-align:center;font-weight:650;color:var(--ink)}
-.name:hover{background:#f3f7f3}.name:focus{background:#fff;outline:1px solid #91c4a2}
-.mark{width:28px;height:28px;max-width:100%;border:1px solid #d7e0d8;border-radius:7px;background:#fff;color:#fff;font-weight:800;transition:background .12s,border-color .12s}
-.mark.on{box-shadow:0 1px 2px #17482d18;background:var(--green);border-color:var(--green)}
-.mark:hover{border-color:var(--green)}.daystart{border-left:2px solid #dce5de!important}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
-.btn{border:1px solid var(--line);border-radius:8px;background:#fff;padding:9px 13px;font-weight:650}
-.btn.primary{background:var(--green);color:#fff;border-color:var(--green)}.btn:hover{filter:brightness(.98)}
-.hidden{display:none!important}
-.schedule{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;min-width:0}
-.schedule th,.schedule td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left}
-.schedule th{font-size:12px;color:#536159;letter-spacing:.02em;background:#f1f5f1;font-weight:750}
-.schedule td{height:54px}.schedule tbody tr:nth-child(even) td{background:#fbfcfb}.schedule tbody tr:hover td{background:#f3f8f4}
-.schedule th:first-child{border-radius:7px 0 0 0}.schedule th:last-child{border-radius:0 7px 0 0}
-.schedule tr:last-child td{border-bottom:0}.schedule td:first-child{font-weight:700}
-.schedule small{display:block;font-weight:400;color:var(--muted);margin-top:3px}
-.uncovered{color:#b23c36;font-weight:700}.message{font-size:13px;color:var(--muted);margin:12px 0 0}
-.message.warn{color:#a23b32}.message.ok{color:var(--green)}.empty{text-align:center;padding:22px;color:var(--muted)}
-.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:8px}
-.dot{width:8px;height:8px;border-radius:50%;background:#9aa59d}.dot.live{background:#26734d}
-.adminbox{border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:12px;background:#fbfcfb}
-.adminbox label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
-.adminbox input{font:inherit;padding:9px;border:1px solid var(--line);border-radius:7px;max-width:260px;width:100%}
-@media(max-width:600px){
-.wrap{padding:16px 8px 28px}header{margin-bottom:14px}h1{font-size:23px}.panel{padding:10px}.panelhead{align-items:flex-start;gap:8px}
-.tabs{gap:6px;margin:14px 0 10px}.tab{flex:1;padding:9px 6px;font-size:12px}.hint{font-size:11px}
-.avail{min-width:760px;table-layout:fixed}.avail th,.avail td{padding:6px 4px;font-size:11px}
-.avail th:first-child,.avail td:first-child{width:75px}.avail th:nth-child(2),.avail td:nth-child(2){width:95px}
-.name{font-size:11px;padding:5px 2px}.mark{width:28px;height:28px}
-.schedule{width:100%;min-width:0;table-layout:fixed}.schedule th,.schedule td{padding:10px 5px;font-size:11px;overflow-wrap:anywhere;word-break:normal}
-.schedule th:first-child,.schedule td:first-child{width:23%}.schedule th:not(:first-child),.schedule td:not(:first-child){width:25.66%}
-.schedule td{height:48px}.actions{gap:6px}.btn{padding:8px 9px;font-size:12px}
+  :root {
+    --green: #26734d;
+    --pale: #e9f5ed;
+    --ink: #202923;
+    --muted: #68736c;
+    --line: #e3e9e4;
+    --bg: #f7f9f7;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 18px 48px;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.3;
+    letter-spacing: -0.6px;
+  }
+
+  header p {
+    margin: 6px 0 0;
+    color: var(--muted);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0 16px;
+  }
+
+  .tab,
+  button {
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .tab {
+    padding: 10px 15px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--muted);
+    font-weight: 650;
+  }
+
+  .tab.active {
+    border-color: var(--green);
+    background: var(--green);
+    color: #fff;
+  }
+
+  .panel {
+    min-width: 0;
+    margin-bottom: 18px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 8px #203c2910;
+  }
+
+  .panelhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .hint {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  #scheduleMsg {
+  margin: 0 0 16px;
 }
-@media print{
-body{background:#fff}.tabs,#availability,.panelhead .btn,.actions,#adminbox,#connectionStatus{display:none!important}
-#schedule{display:block!important}.wrap{max-width:none;padding:0}.panel{border:0;padding:0}.scroll{overflow:visible;border:0}
-.schedule th,.schedule td{padding:10px}
-}
+
+  /* Tabelat dhe lëvizja horizontale */
+
+
+  .scroll {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .avail {
+    width: 100%;
+    min-width: 760px;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .avail th,
+  .avail td {
+    padding: 8px 4px;
+    border-right: 1px solid #edf1ed;
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .avail th {
+    background: #f3f6f3;
+    color: #536159;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .avail thead tr:first-child th {
+    padding: 11px 6px;
+    background: #eaf0eb;
+    color: #34483b;
+    font-size: 12px;
+  }
+
+  .avail tbody tr:nth-child(even) td {
+    background: #fbfcfb;
+  }
+
+  .avail tbody tr:hover td {
+    background: #f3f8f4;
+  }
+
+  .avail th:first-child,
+  .avail td:first-child {
+    width: 75px;
+    border-right: 1px solid #dce5de;
+    background: #f5f8f5;
+    text-align: left;
+    font-weight: 650;
+  }
+
+  .avail th:nth-child(2),
+  .avail td:nth-child(2) {
+    width: 95px;
+  }
+
+  .avail td {
+    height: 48px;
+  }
+
+  .avail tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .avail th:last-child,
+  .avail td:last-child {
+    border-right: 0;
+  }
+
+  .name {
+    width: 100%;
+    min-width: 0;
+    padding: 6px 2px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 650;
+    text-align: center;
+  }
+
+  .name:hover {
+    background: #f3f7f3;
+  }
+
+  .name:focus {
+    outline: 1px solid #91c4a2;
+    background: #fff;
+  }
+
+  .mark {
+    width: 28px;
+    height: 28px;
+    max-width: 100%;
+    border: 1px solid #d7e0d8;
+    border-radius: 7px;
+    background: #fff;
+    color: #fff;
+    font-weight: 800;
+    transition: background 0.12s, border-color 0.12s;
+  }
+
+  .mark.on {
+    border-color: var(--green);
+    background: var(--green);
+    box-shadow: 0 1px 2px #17482d18;
+  }
+
+  .mark:hover {
+    border-color: var(--green);
+  }
+
+  .daystart {
+    border-left: 2px solid #dce5de !important;
+  }
+
+  /* Butonat */
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .btn {
+    padding: 9px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+    font-weight: 650;
+  }
+
+  .btn.primary {
+    border-color: var(--green);
+    background: var(--green);
+    color: #fff;
+  }
+
+  .btn:hover {
+    filter: brightness(0.97);
+  }
+
+  .btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  .btn.is-loading::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    vertical-align: -2px;
+    animation: button-spin 0.7s linear infinite;
+  }
+
+  @keyframes button-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* Paneli i menaxherit */
+
+  .adminbox {
+    margin-top: 12px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: #fbfcfb;
+  }
+
+  .adminbox label {
+    display: block;
+    margin: 12px 0 5px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .adminbox input {
+    width: 100%;
+    max-width: 320px;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    font: inherit;
+  }
+
+  .password-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 380px;
+  }
+
+  .password-row input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .password-toggle {
+    padding: 9px 11px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: #fff;
+    line-height: 1;
+  }
+
+  .manager-access {
+    margin: 0 0 16px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .manager-access summary {
+    color: var(--green);
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .manager-access .adminbox {
+    margin-top: 12px;
+  }
+
+  .schedule-setup {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(190px, 1fr);
+    gap: 14px;
+    margin: 0 0 18px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fbfcfb;
+  }
+
+  .schedule-setup label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .schedule-setup input {
+    width: 100%;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid #d7e0d8;
+    border-radius: 7px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+  }
+
+  /* Informacioni i orarit të publikuar */
+
+  .shop-title {
+    margin: 0;
+    color: var(--green);
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .schedule-period {
+    display: block;
+    margin: 8px 0 22px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--line);
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  .schedule .date-cell {
+    color: #45564b;
+    font-weight: 600;
+  }
+
+  .schedule td.uncovered-cell {
+    background: #fff7f7;
+    vertical-align: middle;
+  }
+
+  /* Tabela e orarit javor */
+
+  .schedule {
+    width: 100%;
+    min-width: 560px;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+  }
+
+  .schedule th,
+  .schedule td {
+    padding: 14px 12px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: middle;
+    overflow-wrap: break-word;
+  }
+
+  .schedule th {
+    background: #eaf0eb;
+    color: #34483b;
+    font-size: 12px;
+    font-weight: 750;
+    line-height: 1.5;
+  }
+
+  .schedule th:first-child,
+  .schedule td:first-child {
+    width: 24%;
+  }
+
+  .schedule th:last-child,
+  .schedule td:last-child {
+    border-right: 0;
+  }
+
+  .schedule th:first-child {
+    border-radius: 7px 0 0 0;
+  }
+
+  .schedule th:last-child {
+    border-radius: 0 7px 0 0;
+  }
+
+  .schedule td {
+    height: 60px;
+    line-height: 1.55;
+  }
+
+  .schedule tbody tr:nth-child(even) td {
+    background: #f7faf7;
+  }
+
+  .schedule tbody tr:hover td {
+    background: #edf5ef;
+  }
+
+  .schedule tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .schedule td:first-child {
+    color: #34483b;
+    font-weight: 750;
+  }
+
+  .schedule small {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+
+  .uncovered {
+    color: #c62828;
+    font-weight: 700;
+  }
+
+  /* Mesazhet dhe statuset */
+
+  .message {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .message.warn {
+    color: #a23b32;
+  }
+
+  .message.ok {
+    color: var(--green);
+  }
+
+  #availabilityMsg {
+    margin: 0 0 22px;
+    padding: 14px 16px;
+    border: 1px solid #ead9ad;
+    border-left: 4px solid #c28a22;
+    border-radius: 8px;
+    background: #fffaf0;
+    color: #684d16;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .schedule-state {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    margin: 0 0 20px;
+    padding: 7px 12px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 750;
+    white-space: normal;
+  }
+
+  .published-state {
+    border-color: #b9dec5;
+    background: #edf8f0;
+    color: #216e47;
+  }
+
+  .draft-state {
+    border-color: #f0d6a9;
+    background: #fff5e5;
+    color: #8a5100;
+  }
+
+  .message.feedback {
+    display: block;
+    padding: 12px 14px;
+    border: 1px solid #c9dfcf;
+    border-radius: 9px;
+    background: #eef8f0;
+    color: #205b39;
+    font-size: 14px;
+    font-weight: 650;
+  }
+
+  .message.feedback.warn {
+    border-color: #efc5bd;
+    background: #fff2ef;
+    color: #9d3027;
+  }
+
+  .empty {
+    padding: 22px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #9aa59d;
+  }
+
+  .dot.live {
+    background: var(--green);
+  }
+
+  /* Pamja në telefon */
+
+  @media (max-width: 600px) {
+    .wrap {
+      padding: 16px 9px 28px;
+    }
+
+    header {
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 23px;
+    }
+
+    .panel {
+      padding: 12px;
+      border-radius: 10px;
+    }
+
+    .panelhead {
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    .panelhead h2 {
+      font-size: 19px;
+    }
+
+    .tabs {
+      gap: 6px;
+      margin: 14px 0 12px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 9px 6px;
+      font-size: 12px;
+    }
+
+    .hint {
+      font-size: 12px;
+    }
+
+    .avail {
+      min-width: 760px;
+      table-layout: fixed;
+    }
+
+    .avail th,
+    .avail td {
+      padding: 6px 4px;
+      font-size: 11px;
+    }
+
+    .avail th:first-child,
+    .avail td:first-child {
+      width: 75px;
+    }
+
+    .avail th:nth-child(2),
+    .avail td:nth-child(2) {
+      width: 95px;
+    }
+
+    .name {
+      padding: 5px 2px;
+      font-size: 11px;
+    }
+
+    .mark {
+      width: 28px;
+      height: 28px;
+    }
+
+    .schedule-setup {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 12px;
+    }
+
+    .schedule {
+      min-width: 560px;
+      table-layout: fixed;
+    }
+
+    .schedule th,
+    .schedule td {
+      padding: 11px 8px;
+      font-size: 12px;
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
+
+    .schedule th:first-child,
+    .schedule td:first-child {
+      width: 24%;
+    }
+
+    .schedule th:not(:first-child),
+    .schedule td:not(:first-child) {
+      width: 25.33%;
+    }
+
+    .shop-title {
+      font-size: 22px;
+    }
+
+    .schedule-period {
+      margin-bottom: 17px;
+      font-size: 13px;
+    }
+
+    .actions {
+      gap: 6px;
+    }
+
+    .btn {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+  }
+
+  /* PRINT: vetëm orari i publikuar */
+
+  @page {
+    size: landscape;
+    margin: 12mm;
+  }
+
+  @media print {
+    body {
+      background: #fff !important;
+      color: #111 !important;
+      font-size: 11pt;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body * {
+      visibility: hidden !important;
+    }
+
+    #schedule,
+    #schedule * {
+      visibility: visible !important;
+    }
+
+    #schedule {
+      display: block !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: #fff !important;
+    }
+
+    #schedule .panelhead .btn,
+    #schedule .actions,
+    #schedule .schedule-state,
+    #schedule .message,
+    #schedule .hint {
+      display: none !important;
+    }
+
+    #schedule .shop-title {
+      margin: 0 0 5px !important;
+      color: #111 !important;
+      font-size: 22pt !important;
+    }
+
+    #schedule .schedule-period {
+      margin: 0 0 14px !important;
+      padding-bottom: 8px !important;
+      border-bottom: 1px solid #999 !important;
+      color: #333 !important;
+      font-size: 11pt !important;
+    }
+
+    #schedule .scroll {
+      width: 100% !important;
+      max-width: none !important;
+      overflow: visible !important;
+      border: 1px solid #999 !important;
+      border-radius: 0 !important;
+    }
+
+    #schedule .schedule {
+      width: 100% !important;
+      min-width: 0 !important;
+      table-layout: fixed !important;
+      border-collapse: collapse !important;
+      font-size: 10pt !important;
+    }
+
+    #schedule .schedule th,
+    #schedule .schedule td {
+      padding: 8px !important;
+      border: 1px solid #bbb !important;
+      color: #111 !important;
+      overflow-wrap: break-word !important;
+    }
+
+    #schedule .schedule th {
+      background: #eaf0eb !important;
+      font-size: 10pt !important;
+    }
+
+    #schedule .schedule td {
+      height: auto !important;
+      min-height: 0 !important;
+      background: #fff !important;
+    }
+
+    #schedule .schedule small {
+      color: #444 !important;
+      font-size: 9pt !important;
+    }
+
+    #schedule .uncovered {
+      color: #111 !important;
+    }
+
+    #schedule .schedule tr {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    html,
+    body,
+    .wrap {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+  }
 </style>
+
 </head>
 <body>
 <main class="wrap">
-<header><div><h1>Weekly Shift Schedule</h1><p>Monday–Sunday · 3 shifts per day</p><div class="status" id="connectionStatus"><span class="dot" id="statusDot"></span><span id="statusText">Connecting to shared schedule…</span></div></div></header>
+<header>
+  <div>
+    <h1>Orari javor i ndërrimeve</h1>
+    <p>E hënë – E diel · 3 ndërrime në ditë</p>
+    <div class="status" id="connectionStatus">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">Duke u lidhur me orarin e përbashkët...</span>
+    </div>
+  </div>
+</header>
+
+<details class="manager-access">
+  <summary>Qasja e menaxherit</summary>
+  <div class="adminbox" id="adminbox">
+    <strong>Qasja e menaxherit</strong>
+
+    <p class="hint" id="managerStatus">Paneli i menaxherit është i mbyllur.</p>
+
+    <label for="managerPin">Fjalëkalimi i menaxherit</label>
+    <div class="password-row">
+      <input id="managerPin" type="password" autocomplete="current-password" placeholder="Shkruaj fjalëkalimin">
+      <button class="password-toggle" type="button" data-toggle-password="managerPin" aria-label="Shfaq fjalëkalimin" title="Shfaq fjalëkalimin">👁</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="managerLogin" type="button">Hyr si menaxher</button>
+      <button class="btn hidden" id="managerLogout" type="button">Dil nga paneli</button>
+    </div>
+
+    <p class="message" id="managerMsg">
+      Punonjësit shënojnë disponueshmërinë; menaxheri krijon dhe publikon orarin.
+    </p>
+
+    <div class="actions">
+      <button class="btn hidden" id="showChangePin" type="button">Ndrysho fjalëkalimin</button>
+    </div>
+
+    <div id="changePinForm" class="hidden">
+      <p class="hint">Mund ta ndryshosh fjalëkalimin vetëm pasi të kyçesh si menaxher. Plotëso fjalëkalimin e ri dhe konfirmoje.</p>
+
+      <label for="newManagerPin">Fjalëkalimi i ri</label>
+      <div class="password-row">
+        <input id="newManagerPin" type="password" autocomplete="new-password" placeholder="Të paktën 8 karaktere">
+        <button class="password-toggle" type="button" data-toggle-password="newManagerPin" aria-label="Shfaq fjalëkalimin" title="Shfaq fjalëkalimin">👁</button>
+      </div>
+
+      <label for="confirmManagerPin">Konfirmo fjalëkalimin e ri</label>
+      <div class="password-row">
+        <input id="confirmManagerPin" type="password" autocomplete="new-password" placeholder="Shkruaje përsëri">
+        <button class="password-toggle" type="button" data-toggle-password="confirmManagerPin" aria-label="Shfaq fjalëkalimin" title="Shfaq fjalëkalimin">👁</button>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="changeManagerPin" type="button">Ruaj fjalëkalimin e ri</button>
+        <button class="btn" id="cancelChangePin" type="button">Anulo</button>
+      </div>
+
+      <p class="message" id="changePinMsg" role="status"></p>
+    </div>
+  </div>
+</details>
+
 <nav class="tabs">
-<button class="tab active" data-view="availability">Availability</button>
-<button class="tab" data-view="schedule">Weekly schedule</button>
+  <button class="tab active" data-view="availability">Disponueshmëria</button>
+  <button class="tab" data-view="schedule">Orari javor</button>
 </nav>
+
+
 <section id="availability">
 <div class="panel">
-<div class="panelhead"><div><h2>Team availability</h2><p class="hint">Click a box to mark availability. Empty means unavailable.</p></div><button class="btn" id="clear" disabled>Clear marks</button></div>
-<div class="scroll"><table class="avail"><thead id="ah"></thead><tbody id="ab"></tbody></table></div>
-<div class="actions"><button class="btn primary" id="make" disabled>Generate schedule</button></div>
-<p class="message" id="availabilityMsg">Connecting…</p>
-<div class="adminbox" id="adminbox">
-<strong>Manager access</strong>
-<p class="hint">Enter the manager PIN to edit names, clear all marks, or generate and publish the schedule.</p>
-<label for="managerPin">Manager PIN</label>
-<input id="managerPin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter manager PIN">
+  <div class="panelhead">
+    <div>
+      <h2>Disponueshmëria e ekipit</h2>
+      <p class="hint">Kliko një kuti për të shënuar disponueshmërinë. Kutia bosh do të thotë se nuk je i disponueshëm.</p>
+    </div>
+    <button class="btn" id="clear" disabled>Pastro shënimet</button>
+  </div>
 
-<div id="changePinSection" class="hidden">
-  <input
-    id="newManagerPin"
-    type="password"
-    autocomplete="new-password"
-    placeholder="New manager password (8+ characters)"
-  >
-  <button class="btn" id="changeManagerPin">Change manager password</button>
-  <p id="changePinMsg" role="status"></p>
-</div>
+  <div class="scroll">
+    <table class="avail">
+      <thead id="ah"></thead>
+      <tbody id="ab"></tbody>
+    </table>
+  </div>
 
-<div class="actions"><button class="btn" id="managerLogin">Unlock manager controls</button><button class="btn hidden" id="managerLogout">Lock manager controls</button></div>
-<p class="message" id="managerMsg">Availability marks are open to anyone with the link. Do not use this link as identity verification.</p>
-</div>
+  <div class="schedule-setup manager-only hidden" id="scheduleSetup">
+    <div>
+      <label for="shopName">Emri i lokalit për këtë javë</label>
+      <input id="shopName" maxlength="100" placeholder="Shkruaj emrin e lokalit, p.sh. Lokali Qendror">
+    </div>
+    <div>
+      <label for="weekStart">Java e orarit (zgjidh një datë të javës)</label>
+      <input id="weekStart" type="date">
+    </div>
+    <p class="hint" style="grid-column:1/-1;margin:0">Datat në tabelë llogariten automatikisht nga data e zgjedhur. Tabela e disponueshmërisë mbetet pa kolona datash.</p>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="make" disabled>Gjenero orarin për kontrollim</button>
+  </div>
+  <p class="message" id="availabilityMsg">Duke u lidhur...</p>
+
+
 </div>
 </section>
 <section id="schedule" class="hidden">
+
+<p class="message hidden" id="scheduleMsg" role="alert"></p>
+
 <div class="panel">
-<div class="panelhead"><div><h2>Weekly schedule</h2><p class="hint">Published schedule shared with everyone.</p></div><button class="btn primary manager-only hidden" id="regen">Generate and publish</button></div>
-<div class="scroll"><table class="schedule"><thead><tr><th>Day</th><th>10:00–14:00</th><th>14:00–18:00</th><th>18:00–22:00</th></tr></thead><tbody id="sb"></tbody></table></div>
-<p class="message" id="msg">No schedule has been published yet.</p>
-<div class="actions"><button class="btn" id="print">Print schedule</button><button class="btn" id="csv">Export CSV</button><button class="btn" id="back">Edit availability</button></div>
+
+  <div class="panelhead">
+    <div>
+      <h2>Orari javor</h2>
+      <p class="hint" id="scheduleSubtitle">Orari i publikuar dhe i dukshëm për të gjithë.</p>
+    </div>
+    <span class="schedule-state published-state" id="scheduleState">Orari i publikuar</span>
+  </div>
+
+  <h3 class="shop-title" id="publishedShopName"></h3>
+  <p class="schedule-period" id="publishedWeekPeriod"></p>
+
+  <div class="scroll">
+    <table class="schedule">
+      <thead>
+        <tr>
+          <th>Dita</th>
+          <th>Data</th>
+          <th>10:00–14:00</th>
+          <th>14:00–18:00</th>
+          <th>18:00–22:00</th>
+        </tr>
+      </thead>
+      <tbody id="sb"></tbody>
+    </table>
+  </div>
+
+  <p class="message" id="msg">Nuk është publikuar ende asnjë orar.</p>
+
+  <div class="actions manager-only hidden" id="draftActions">
+    <button class="btn primary" id="publishDraft" type="button">Publiko orarin e kontrolluar</button>
+    <button class="btn" id="regenerateDraft" type="button">Gjenero përsëri</button>
+    <button class="btn" id="returnToAvailability" type="button">Kthehu te disponueshmëria</button>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="print">Printo orarin</button>
+    <button class="btn" id="csv">Eksporto në CSV</button>
+    <button class="btn manager-only hidden" id="newWeek">Hap javën e re</button>
+    <button class="btn manager-only hidden" id="editSchedule" type="button">Kontrollo disponueshmërinë</button>
+  </div>
 </div>
 </section>
+
 </main>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
-  // STEP 1: Replace both values with your Supabase project's URL and publishable/anon key.
- const SUPABASE_URL = "https://qyhjrxfosipeurdkvisw.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_EmpRjIWvLZf9cVhmTsUReQ_SH0i5ha9";
-const FUNCTION_NAME = "weekly-schedule";
+  // Konfigurimi i projektit Supabase.
+  const SUPABASE_URL = "https://qyhjrxfosipeurdkvisw.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_EmpRjIWvLZf9cVhmTsUReQ_SH0i5ha9";
+  const FUNCTION_NAME = "weekly-schedule";
 
-  const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const DAYS = [
+    'E hënë',
+    'E martë',
+    'E mërkurë',
+    'E enjte',
+    'E premte',
+    'E shtunë',
+    'E diel'
+  ];
+
   const SHIFTS = ['10:00–14:00','14:00–18:00','18:00–22:00'];
   const DEFAULT = ['Ardina','Drilon','Ermal','Iris','Luljeta','Valdrin'];
-  const blankAvailability = () => Array.from({length:6},()=>Array.from({length:7},()=>[false,false,false]));
+
+  const blankAvailability = () =>
+    Array.from({length:6},()=>Array.from({length:7},()=>[false,false,false]));
+
   const $ = id => document.getElementById(id);
-  const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  const esc = s => String(s).replace(/[&<>"']/g,c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+
   let names = [...DEFAULT], av = blankAvailability(), result = null;
+  let shopName = '', weekStart = '', draftShopName = '', draftWeekStart = '';
+  let draftResult = null;
   let managerPin = '', isManager = false, client = null, channel = null;
   let stateLoaded = false, pending = false, lastUpdated = null;
+let initialViewSynced = false;
 
   function setStatus(text, live=false) {
     $('statusText').textContent = text;
     $('statusDot').classList.toggle('live', live);
   }
+
   function validConfig() {
-    return !SUPABASE_URL.includes('PASTE_') && !SUPABASE_PUBLISHABLE_KEY.includes('PASTE_');
+    return !SUPABASE_URL.includes('PASTE_') &&
+      !SUPABASE_PUBLISHABLE_KEY.includes('PASTE_');
   }
+
+  function toISODate(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  function mondayOf(date = new Date()) {
+    const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12);
+    monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+    return monday;
+  }
+
+  function dateForDay(startISO, dayIndex) {
+    const parts = String(startISO || '').split('-').map(Number);
+    if (parts.length !== 3 || parts.some(n => !n)) return '';
+    const date = new Date(parts[0], parts[1] - 1, parts[2], 12);
+    date.setDate(date.getDate() + dayIndex);
+    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+  }
+
+  function weekPeriod(startISO) {
+    if (!startISO) return '';
+    return `${dateForDay(startISO, 0)} – ${dateForDay(startISO, 6)}`;
+  }
+
   function normalizedState(state) {
     const safeNames = Array.isArray(state?.names) && state.names.length === 6
-      ? state.names.map((n,i)=>String(n || DEFAULT[i]).slice(0,50)) : [...DEFAULT];
+      ? state.names.map((n,i)=>String(n || DEFAULT[i]).slice(0,50))
+      : [...DEFAULT];
+
     const safeAv = blankAvailability();
+
     if (Array.isArray(state?.av)) {
-      for (let p=0;p<6;p++) for (let d=0;d<7;d++) for (let s=0;s<3;s++) {
-        safeAv[p][d][s] = Boolean(state.av?.[p]?.[d]?.[s]);
+      for (let p=0;p<6;p++) {
+        for (let d=0;d<7;d++) {
+          for (let s=0;s<3;s++) {
+            safeAv[p][d][s] = Boolean(state.av?.[p]?.[d]?.[s]);
+          }
+        }
       }
     }
+
     let safeResult = null;
-    if (Array.isArray(state?.result) && state.result.length===7) {
+
+    if (Array.isArray(state?.result) && state.result.length === 7) {
       safeResult = state.result.map(row => Array.from({length:3},(_,s)=>{
         const v = Number(row?.[s]);
-        return Number.isInteger(v) && v>=0 && v<6 ? v : -1;
+        return Number.isInteger(v) && v >= 0 && v < 6 ? v : -1;
       }));
     }
-    return {names:safeNames,av:safeAv,result:safeResult,updated_at:state?.updated_at || null};
+
+    return {
+      names:safeNames,
+      av:safeAv,
+      result:safeResult,
+      shopName:String(state?.shopName || '').slice(0,100),
+      weekStart:/^\d{4}-\d{2}-\d{2}$/.test(String(state?.weekStart || '')) ? String(state.weekStart) : '',
+      updated_at:state?.updated_at || null
+    };
   }
+
   function applyState(raw) {
     const state = normalizedState(raw);
-    names = state.names; av = state.av; result = state.result; lastUpdated = state.updated_at;
-    stateLoaded = true; drawAvail(); drawSchedule();
-    $('availabilityMsg').textContent = lastUpdated ? `Shared availability loaded. Last saved: ${new Date(lastUpdated).toLocaleString()}.` : 'Shared availability loaded.';
+    names = state.names;
+    av = state.av;
+    result = state.result;
+    shopName = state.shopName;
+    weekStart = state.weekStart;
+    if ($('shopName')) {
+  $('shopName').value = draftShopName || shopName;
+}
+    if ($('weekStart')) $('weekStart').value = weekStart || toISODate(mondayOf());
+    lastUpdated = state.updated_at;
+
+    stateLoaded = true;
+    drawAvail();
+    drawSchedule();
+    syncPublishedView();
+
+    $('availabilityMsg').textContent = lastUpdated
+      ? `Disponueshmëria u ngarkua. Ruajtja e fundit: ${new Date(lastUpdated).toLocaleString('sq-AL')}.`
+      : 'Disponueshmëria u ngarkua.';
+
+    $('availabilityMsg').className = 'message ok';
   }
+
   async function invoke(action, payload={}) {
-    if (!client) throw new Error('Add your Supabase project URL and publishable key in the HTML first.');
+    if (!client) {
+      throw new Error('Nuk ka lidhje me Supabase. Kontrollo konfigurimin e projektit.');
+    }
+
     const body = { action, ...payload };
-    if (managerPin) body.managerPin = managerPin;
+
+    // Lejo fjalëkalimin aktual të formularit të ketë përparësi.
+    if (managerPin && !payload.managerPin) {
+      body.managerPin = managerPin;
+    }
+
     const {data,error} = await client.functions.invoke(FUNCTION_NAME,{body});
+
     if (error) {
-      let message = error.message || 'Request failed.';
-      try { const ctx = error.context; if (ctx && typeof ctx.json==='function') { const detail=await ctx.json(); if(detail?.error) message=detail.error; } } catch {}
+      let message = error.message || 'Kërkesa dështoi.';
+      try {
+        const ctx = error.context;
+        if (ctx && typeof ctx.json === 'function') {
+          const detail = await ctx.json();
+          if (detail?.error) message = detail.error;
+        }
+      } catch {}
       throw new Error(message);
     }
-    if (!data?.ok) throw new Error(data?.error || 'Request failed.');
+
+    if (!data?.ok) {
+      throw new Error(data?.error || 'Kërkesa dështoi.');
+    }
+
     return data;
   }
+
   async function refreshState() {
     const data = await invoke('getState');
     if (data.state) applyState(data.state);
   }
+
   async function saveAvailability(p,d,s,value) {
     if (pending) return;
+    if (Array.isArray(result) && result.length === 7) {
+  $('availabilityMsg').textContent =
+    'Disponueshmëria është mbyllur sepse orari është publikuar. Prit derisa menaxheri të hapë javën e re.';
+  $('availabilityMsg').className = 'message warn';
+  return;
+}
     pending = true;
+
     try {
       await invoke('setAvailability',{person:p,day:d,shift:s,value});
-      $('availabilityMsg').textContent = 'Availability saved and shared.';
+      av[p][d][s] = value;
+
+      $('availabilityMsg').textContent = 'Shënimi u ruajt dhe u nda me ekipin.';
       $('availabilityMsg').className = 'message ok';
+
+      drawAvail();
+      drawSchedule();
     } catch(e) {
-      $('availabilityMsg').textContent = 'Could not save: ' + e.message;
+      $('availabilityMsg').textContent = 'Shënimi nuk u ruajt: ' + e.message;
       $('availabilityMsg').className = 'message warn';
       await refreshState().catch(()=>{});
-    } finally { pending = false; }
+    } finally {
+      pending = false;
+    }
   }
+
   function drawAvail() {
-    let h='<tr><th>Day</th><th>Shift time</th>';
+    let h = '<tr><th>Dita</th><th>Ndërrimi</th>';
+
     names.forEach((n,p)=>{
       h += `<th>${isManager
-        ? `<input class="name" data-name="${p}" value="${esc(n)}" aria-label="Person ${p+1} name">`
+        ? `<input class="name" data-name="${p}" value="${esc(n)}" aria-label="Emri i punonjësit ${p+1}">`
         : `<span>${esc(n)}</span>`}</th>`;
     });
-    $('ah').innerHTML=h+'</tr>';
-    let b='';
+
+    $('ah').innerHTML = h + '</tr>';
+
+    let b = '';
+
     DAYS.forEach((d,di)=>SHIFTS.forEach((shift,si)=>{
-      b+='<tr>';
-      if(si===0)b+=`<td rowspan="3">${d}</td>`;
-      b+=`<td>${shift}</td>`;
+      b += '<tr>';
+
+      if (si === 0) {
+        b += `<td rowspan="3">${d}</td>`;
+      }
+
+      b += `<td>${shift}</td>`;
+
       names.forEach((n,p)=>{
-        const on=Boolean(av[p]?.[di]?.[si]);
-        b+=`<td><button class="mark ${on?'on':''}" data-p="${p}" data-d="${di}" data-s="${si}" aria-label="${esc(n)} ${d} ${shift}" aria-pressed="${on}" ${!stateLoaded?'disabled':''}>${on?'✓':''}</button></td>`;
+        const on = Boolean(av[p]?.[di]?.[si]);
+
+        b += `<td><button
+          class="mark ${on?'on':''}"
+          data-p="${p}"
+          data-d="${di}"
+          data-s="${si}"
+          aria-label="${esc(n)} ${d} ${shift}"
+          aria-pressed="${on}"
+          ${!stateLoaded?'disabled':''}
+        >${on?'✓':''}</button></td>`;
       });
-      b+='</tr>';
+
+      b += '</tr>';
     }));
-    $('ab').innerHTML=b;
-    $('ab').querySelectorAll('.mark').forEach(el=>el.addEventListener('click',()=>{
-      const p=+el.dataset.p,d=+el.dataset.d,s=+el.dataset.s;
-      saveAvailability(p,d,s,!av[p][d][s]);
-    }));
-    if(isManager) $('ah').querySelectorAll('[data-name]').forEach(el=>el.addEventListener('change',async()=>{
-      const p=+el.dataset.name, name=el.value.trim()||DEFAULT[p];
-      try { await invoke('setName',{person:p,name}); }
-      catch(e) { $('managerMsg').textContent='Could not save name: '+e.message; $('managerMsg').className='message warn'; }
-    }));
-    $('clear').disabled=!isManager || !stateLoaded;
-    $('make').disabled=!stateLoaded;
-    document.querySelectorAll('.manager-only').forEach(el=>el.classList.toggle('hidden',!isManager));
-  }
-  function generateSchedule() {
-    const slots=[];
-    for(let d=0;d<7;d++)for(let s=0;s<3;s++)slots.push({d,s});
-    slots.sort((a,b)=>
-      av.reduce((n,p)=>n+(p[a.d][a.s]?1:0),0)-av.reduce((n,p)=>n+(p[b.d][b.s]?1:0),0)||a.d-b.d||a.s-b.s
+
+    $('ab').innerHTML = b;
+
+    const availabilityLocked = Array.isArray(result) && result.length === 7;
+
+$('ab').querySelectorAll('.mark').forEach(el => {
+  el.disabled = !stateLoaded || availabilityLocked || pending;
+});
+
+    $('ab').querySelectorAll('.mark').forEach(el=>
+      el.addEventListener('click',()=>{
+        const p = +el.dataset.p;
+        const d = +el.dataset.d;
+        const s = +el.dataset.s;
+        saveAvailability(p,d,s,!av[p][d][s]);
+      })
     );
-    const assigned=Array.from({length:7},()=>[-1,-1,-1]);
-    const days=Array.from({length:6},()=>new Set()), counts=Array(6).fill(0);
-    for(const {d,s} of slots){
-      const candidates=names.map((_,p)=>p).filter(p=>av[p][d][s]&&!days[p].has(d));
-      candidates.sort((a,b)=>{
-        const score=p=>days[p].size*10+counts[p]*2-((d>0&&days[p].has(d-1)?1:0)+(d<6&&days[p].has(d+1)?1:0))*2;
-        return score(a)-score(b)||a-b;
-      });
-      if(candidates.length){const p=candidates[0];assigned[d][s]=p;days[p].add(d);counts[p]++;}
+
+    if (isManager) {
+      $('ah').querySelectorAll('[data-name]').forEach(el=>
+        el.addEventListener('change',async()=>{
+          const p = +el.dataset.name;
+          const name = el.value.trim() || DEFAULT[p];
+
+          try {
+            await invoke('setName',{person:p,name});
+            names[p] = name;
+            drawAvail();
+            drawSchedule();
+            $('managerMsg').textContent = 'Emri u ruajt me sukses.';
+            $('managerMsg').className = 'message ok';
+          } catch(e) {
+            $('managerMsg').textContent = 'Emri nuk u ruajt: ' + e.message;
+            $('managerMsg').className = 'message warn';
+          }
+        })
+      );
     }
+
+    $('clear').disabled = !isManager || !stateLoaded;
+    $('make').disabled = !stateLoaded || !isManager;
+} 
+    
+  // Cakto vetëm punonjës që e kanë shënuar disponueshmërinë për atë ndërrim.
+  function generateSchedule() {
+    const slots = [];
+
+    for (let d=0;d<7;d++) {
+      for (let s=0;s<3;s++) {
+        slots.push({d,s});
+      }
+    }
+
+    // Përparësi për ndërrimet ku ka më pak punonjës të disponueshëm.
+    slots.sort((a,b)=>
+      av.reduce((n,p)=>n+(p[a.d][a.s]?1:0),0) -
+      av.reduce((n,p)=>n+(p[b.d][b.s]?1:0),0) ||
+      a.d-b.d ||
+      a.s-b.s
+    );
+
+    const assigned = Array.from({length:7},()=>[-1,-1,-1]);
+    const days = Array.from({length:6},()=>new Set());
+    const counts = Array(6).fill(0);
+
+    for (const {d,s} of slots) {
+      // Për këtë ndërrim caktohen vetëm punonjësit që e kanë shënuar
+      // disponueshmërinë. Nëse askush nuk është shënuar, ndërrimi mbetet bosh
+      // dhe shfaqet me të kuqe në panelin e kontrollimit dhe në orarin final.
+      const candidates = names.map((_,p)=>p)
+        .filter(p=>av[p][d][s] && !days[p].has(d));
+
+      candidates.sort((a,b)=>{
+        const score = p =>
+          days[p].size * 10 +
+          counts[p] * 2 -
+          (
+            (d>0 && days[p].has(d-1) ? 1 : 0) +
+            (d<6 && days[p].has(d+1) ? 1 : 0)
+          ) * 2;
+
+        return score(a)-score(b) || a-b;
+      });
+
+      if (candidates.length) {
+        const p = candidates[0];
+        assigned[d][s] = p;
+        days[p].add(d);
+        counts[p]++;
+      }
+    }
+
     return assigned;
   }
+
   function drawSchedule() {
-    if(!result){
-      $('sb').innerHTML='<tr><td colspan="4" class="empty">No schedule has been published yet.</td></tr>';
-      $('msg').textContent='The manager can generate and publish a schedule after availability has been marked.';
-      $('msg').className='message';return;
+    const showingDraft = Array.isArray(draftResult) && draftResult.length === 7;
+    const scheduleToDraw = showingDraft ? draftResult : result;
+    const shownShop = showingDraft ? draftShopName : shopName;
+    const shownWeek = showingDraft ? draftWeekStart : weekStart;
+    $('scheduleState').textContent = showingDraft ? 'Në kontrollim' : 'Orari i publikuar';
+    $('scheduleState').className = 'schedule-state ' + (showingDraft ? 'draft-state' : 'published-state');
+    $('scheduleSubtitle').textContent = showingDraft
+      ? 'Ky është versioni paraprak. Kontrolloje para se ta publikosh për ekipin.'
+      : 'Ky është orari zyrtar i publikuar dhe i dukshëm për të gjithë.';
+    
+      // Butonat e kontrollimit shfaqen vetëm para publikimit
+$('draftActions').classList.toggle(
+  'hidden',
+  !isManager || !showingDraft
+);
+
+$('regenerateDraft').classList.add('hidden');
+
+// Printimi shfaqet për të gjithë pasi orari është gjeneruar
+// Butonat e kontrollimit shfaqen vetëm kur ka draft
+$('draftActions').classList.toggle(
+  'hidden',
+  !isManager || !showingDraft
+);
+
+$('regenerateDraft').classList.add('hidden');
+
+// Printimi shfaqet për të gjithë kur ka orar
+$('print').classList.toggle(
+  'hidden',
+  !scheduleToDraw || showingDraft
+);
+
+// CSV shfaqet vetëm për ekipin
+$('csv').classList.toggle(
+  'hidden',
+  !scheduleToDraw || showingDraft || isManager
+);
+
+// Menaxherja e sheh vetëm pas publikimit
+$('newWeek').classList.toggle(
+  'hidden',
+  !isManager || showingDraft || !result
+);
+
+// Fshihi këta butona nga paneli i orarit
+$('editSchedule').classList.add('hidden');
+$('scheduleSetup').classList.toggle('hidden', !isManager);
+    $('publishedShopName').textContent = shownShop || (showingDraft ? 'Emri i lokalit nuk është plotësuar' : '');
+    $('publishedWeekPeriod').textContent = shownWeek ? `Java: ${weekPeriod(shownWeek)}` : '';
+    $('publishedShopName').classList.toggle('hidden', !shownShop && !showingDraft);
+    $('publishedWeekPeriod').classList.toggle('hidden', !shownWeek);
+
+    if (!scheduleToDraw) {
+      $('sb').innerHTML = '<tr><td colspan="5" class="empty">Nuk është publikuar ende asnjë orar.</td></tr>';
+      $('msg').textContent = 'Ky seksion do të shfaqë orarin pasi menaxheri ta gjenerojë dhe ta publikojë.';
+      $('msg').className = 'message';
+      return;
     }
-    let missing=0,b='';
+
+    let missing = 0, b = '';
     DAYS.forEach((d,di)=>{
-      b+=`<tr><td>${d}</td>`;
+      b += `<tr><td>${d}</td><td class="date-cell">${dateForDay(shownWeek, di) || '—'}</td>`;
       SHIFTS.forEach((shift,si)=>{
-        const p=result[di][si];if(p<0)missing++;
-        b+=`<td>${p<0?'<span class="uncovered">Uncovered</span>':esc(names[p])}</td>`;
-      });b+='</tr>';
+        const person = scheduleToDraw[di][si];
+        if (person < 0) {
+          missing++;
+          // Sipas kërkesës, në qelizën e pambuluar shfaqet vetëm fjala "Askush" me të kuqe.
+          const detail = av.some(personAvailability => Boolean(personAvailability?.[di]?.[si]))
+            ? 'Ka shënime disponueshmërie, por askush nuk u caktua.'
+            : 'Asnjë punëtor nuk ka shënuar se është i disponueshëm për këtë ndërrim.';
+          b += `<td class="uncovered-cell"><span class="uncovered" title="${detail}">Askush</span></td>`;
+        } else {
+          b += `<td>${esc(names[person])}</td>`;
+        }
+      });
+      b += '</tr>';
     });
-    $('sb').innerHTML=b;
-    $('msg').textContent=missing?`${missing} shift${missing===1?' is':'s are'} uncovered because nobody available could be assigned. Update availability and generate again.`:'All shifts are covered.';
-    $('msg').className='message'+(missing?' warn':' ok');
+    $('sb').innerHTML = b;
+
+    if (showingDraft) {
+      $('msg').textContent = missing
+        ? `Version paraprak: ${missing} ndërrime janë pa caktim. Kontrolloje tabelën para publikimit.`
+        : 'Version paraprak i krijuar. Kontrolloje emrin e lokalit, datat dhe ndërrimet; pastaj publikoje.';
+      $('msg').className = 'message feedback' + (missing ? ' warn' : '');
+    } else {
+      $('msg').textContent = missing
+        ? `${missing} ndërrime mbetën pa caktim në orarin e publikuar.`
+        : 'Orari është publikuar. Të gjitha ndërrimet janë caktuar.';
+      $('msg').className = 'message' + (missing ? ' warn' : ' ok');
+    }
   }
-  function show(view) {
-    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===view));
-    $('availability').classList.toggle('hidden',view!=='availability');
-    $('schedule').classList.toggle('hidden',view!=='schedule');
-    if(view==='schedule')drawSchedule();
+
+  
+function syncPublishedView() {
+  const published = Array.isArray(result) && result.length === 7;
+
+  if (!initialViewSynced) {
+    initialViewSynced = true;
+
+    if (draftResult || published) {
+      show('schedule');
+    } else {
+      show('availability');
+    }
   }
-  async function publishGenerated() {
-     if (!isManager) {
-      $('availabilityMsg').textContent =
-        'Manager only. Only the manager can generate and publish the weekly schedule. Please mark your availability and let the manager handle scheduling.';
+
+  // Përditëso butonat sa herë që sinkronizohet pamja
+  drawSchedule();
+}
+
+  
+function show(view) {
+  const published =
+    Array.isArray(result) && result.length === 7;
+
+  const message = $('scheduleMsg');
+
+  message.classList.add('hidden');
+  message.textContent = '';
+
+  if (view === 'availability' && published) {
+    message.textContent = isManager
+      ? 'Disponueshmëria nuk mund të hapet sepse orari është publikuar. Kliko "Hap javën e re" për të filluar javën tjetër.'
+      : 'Disponueshmëria nuk mund të plotësohet sepse orari është publikuar. Ajo do të hapet përsëri kur menaxheri të fillojë javën e re.';
+
+    message.className = 'message feedback warn';
+
+    view = 'schedule';
+  }
+
+  document.querySelectorAll('.tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.view === view)
+  );
+
+  $('availability').classList.toggle(
+    'hidden',
+    view !== 'availability'
+  );
+
+  $('schedule').classList.toggle(
+    'hidden',
+    view !== 'schedule'
+  );
+
+  if (view === 'schedule') {
+    drawSchedule();
+  }
+}
+
+
+  function generateDraft() {
+    if (!isManager) {
+      const warning = 'Kyçu si menaxher për të gjeneruar orarin për kontrollim.';
+      $('availabilityMsg').textContent = warning;
       $('availabilityMsg').className = 'message warn';
       return;
     }
-    const generated=generateSchedule();
-    try {
-      await invoke('publishSchedule',{result:generated});
-      $('availabilityMsg').textContent='Schedule generated and published for everyone.';
-      $('availabilityMsg').className='message ok';
-      show('schedule');
-    } catch(e) {
-      $('availabilityMsg').textContent='Could not publish schedule: '+e.message;
-      $('availabilityMsg').className='message warn';
+    const enteredShop = $('shopName').value.trim() || shopName || draftShopName;
+    const selectedDate = $('weekStart').value || toISODate(mondayOf());
+    if (!enteredShop) {
+      $('availabilityMsg').textContent = 'Shkruaj emrin e lokalit para se ta krijosh orarin.';
+      $('availabilityMsg').className = 'message warn';
+      $('scheduleSetup').classList.remove('hidden');
+      $('shopName').focus();
+      return;
     }
+    // Normalizo datën e zgjedhur në të hënën e asaj jave.
+    const picked = new Date(`${selectedDate}T12:00:00`);
+    const monday = mondayOf(picked);
+    draftShopName = enteredShop.slice(0,100);
+    draftWeekStart = toISODate(monday);
+    $('weekStart').value = draftWeekStart;
+    draftResult = generateSchedule();
+    drawSchedule();
+    show('schedule');
+    $('schedule').scrollIntoView({behavior:'smooth', block:'start'});
   }
-  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>show(t.dataset.view)));
-  $('make').addEventListener('click',publishGenerated);
-  $('regen').addEventListener('click',publishGenerated);
-  $('back').addEventListener('click',()=>show('availability'));
-  $('clear').addEventListener('click',async()=>{
-    if(!isManager||!confirm('Clear availability for all employees?'))return;
-    try { await invoke('clearAvailability'); $('availabilityMsg').textContent='All availability marks cleared.'; }
-    catch(e) { $('availabilityMsg').textContent='Could not clear marks: '+e.message; $('availabilityMsg').className='message warn'; }
-  });
-  $('managerLogin').addEventListener('click',async()=>{
-    const pin=$('managerPin').value.trim();
-    if(!pin){$('managerMsg').textContent='Enter your manager PIN.';return;}
-    managerPin=pin;
+
+  async function publishDraft() {
+    if (!isManager) {
+      $('msg').textContent = 'Kyçu si menaxher për ta publikuar orarin.';
+      $('msg').className = 'message feedback warn';
+      return;
+    }
+    if (!draftResult) {
+      $('msg').textContent = 'Gjenero fillimisht një orar për kontrollim.';
+      $('msg').className = 'message feedback warn';
+      return;
+    }
+    if (pending) return;
+    const uncoveredCount = draftResult.reduce((total, row) =>
+      total + row.filter(person => !Number.isInteger(person) || person < 0 || person >= names.length).length, 0);
+    if (uncoveredCount > 0) {
+      $('msg').textContent = `Orari nuk mund të publikohet: ${uncoveredCount} ndërrime kanë “Askush”. Kthehu te disponueshmëria dhe cakto punonjës të disponueshëm për çdo ndërrim.`;
+      $('msg').className = 'message feedback warn';
+      return;
+    }
+    if (!window.confirm('A e kontrollove orarin dhe dëshiron ta publikosh për të gjithë ekipin?')) return;
+
+    pending = true;
+    const button = $('publishDraft');
+    button.disabled = true;
+    button.classList.add('is-loading');
+    button.textContent = 'Duke publikuar…';
+    $('msg').textContent = 'Orari po ruhet dhe po publikohet për ekipin. Prit pak…';
+    $('msg').className = 'message feedback';
     try {
-      const data=await invoke('managerCheck');
-      if(!data.manager){throw new Error('Manager PIN was not accepted.');}
-      isManager=true;
-      $('managerMsg').textContent='Manager controls unlocked in this tab.';
-      $('managerMsg').className='message ok';
-      $('managerLogin').classList.add('hidden');$('managerLogout').classList.remove('hidden');
-      $('managerPin').disabled=true;
-$('changePinSection').classList.remove('hidden');
+      const generated = draftResult;
+      await invoke('publishSchedule', {result: generated, shopName: draftShopName, weekStart: draftWeekStart});
+      result = generated;
+shopName = draftShopName;
+weekStart = draftWeekStart;
+draftResult = null;
+
 drawAvail();
-    } catch(e) {
-      managerPin='';isManager=false;
-      $('managerMsg').textContent=e.message;
-      $('managerMsg').className='message warn';
+drawSchedule();
+syncPublishedView();
+      show('schedule');
+      $('msg').textContent = 'Orari u publikua me sukses. Ky është tani orari zyrtar që shohin punëtorët.';
+      $('msg').className = 'message feedback ok';
+      $('schedule').scrollIntoView({behavior:'smooth', block:'start'});
+    } catch (e) {
+      $('msg').textContent = 'Publikimi dështoi: ' + (e?.message || 'Gabim i panjohur') + '. Orari paraprak nuk u humb; provo përsëri.';
+      $('msg').className = 'message feedback warn';
+    } finally {
+      pending = false;
+      button.disabled = false;
+      button.classList.remove('is-loading');
+      button.textContent = 'Publiko orarin e kontrolluar';
     }
-  });
-  $('managerLogout').addEventListener('click',()=>{
-    managerPin='';isManager=false;$('managerPin').value='';$('managerPin').disabled=false;
-$('changePinSection').classList.add('hidden');
-$('newManagerPin').value='';
-$('changePinMsg').textContent='';
-    $('managerLogin').classList.remove('hidden');$('managerLogout').classList.add('hidden');
-    $('managerMsg').textContent='Manager controls locked.';drawAvail();
-  });
-  
-  
-$('changeManagerPin').addEventListener('click', async () => {
-  const newPin = $('newManagerPin').value;
-
-  if (!isManager) {
-    $('changePinMsg').textContent = 'Unlock manager controls first.';
-    return;
   }
 
-  if (newPin.length < 8 || newPin.length > 128) {
-    $('changePinMsg').textContent =
-      'Use a password between 8 and 128 characters.';
-    return;
-  }
 
-  if (!window.confirm('Change the manager password?')) return;
+ 
 
-  const button = $('changeManagerPin');
-  button.disabled = true;
+  $('shopName').addEventListener('input', () => {
+  shopName = $('shopName').value.trim();
 
-  try {
-    await invoke('changeManagerPin', { newManagerPin: newPin });
-
-    managerPin = newPin;
-    $('managerPin').value = newPin;
-    $('newManagerPin').value = '';
-    $('changePinMsg').textContent = 'Manager password changed successfully!';
-    $('changePinMsg').className = 'message ok';
-  } catch (e) {
-    $('changePinMsg').textContent = 'Could not change password: ' + e.message;
-    $('changePinMsg').className = 'message warn';
-  } finally {
-    button.disabled = false;
+  if (draftResult) {
+    draftShopName = shopName;
+    drawSchedule();
   }
 });
+  $('weekStart').addEventListener('change', () => { if (draftResult) { const picked = new Date(`${$('weekStart').value}T12:00:00`); draftWeekStart = toISODate(mondayOf(picked)); $('weekStart').value = draftWeekStart; drawSchedule(); } });
+  $('make').addEventListener('click', generateDraft);
+  $('publishDraft').addEventListener('click', publishDraft);
 
-  $('print').addEventListener('click',()=>window.print());
-  $('csv').addEventListener('click',()=>{
-    if(!result)return;
-    const rows=[['Day',...SHIFTS],...DAYS.map((d,di)=>[d,...result[di].map(p=>p<0?'Uncovered':names[p])])];
-    const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
-    const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
-    const url=URL.createObjectURL(blob),a=document.createElement('a');
-    a.href=url;a.download='weekly-shift-schedule.csv';a.click();URL.revokeObjectURL(url);
+  document.querySelectorAll('[data-toggle-password]').forEach(button => {
+    button.addEventListener('click', () => {
+      const field = $(button.dataset.togglePassword);
+      if (!field) return;
+      const reveal = field.type === 'password';
+      field.type = reveal ? 'text' : 'password';
+      button.textContent = reveal ? '🙈' : '👁';
+      button.title = reveal ? 'Fshih fjalëkalimin' : 'Shfaq fjalëkalimin';
+      button.setAttribute('aria-label', button.title);
+    });
+  });
+  $('regenerateDraft').addEventListener('click', generateDraft);
+  $('returnToAvailability').addEventListener('click', () => show('availability'));
+  $('editSchedule').addEventListener('click', () => show('availability'));
+
+  $('newWeek').addEventListener('click', async()=>{
+    if (!isManager) {
+      $('msg').textContent = 'Vetëm menaxheri mund ta hapë javën e re.';
+      $('msg').className = 'message warn';
+      return;
+    }
+
+    if (!window.confirm('A dëshiron ta mbyllësh orarin e publikuar dhe t’i pastrosh shënimet për javën e re?')) return;
+
+    const button = $('newWeek');
+    button.disabled = true;
+    try {
+      await invoke('clearAvailability');
+      draftResult = null;
+      await refreshState();
+      $('availabilityMsg').textContent = 'Java e re u hap. Shënoni disponueshmërinë për javën e re.';
+      $('availabilityMsg').className = 'message ok';
+      show('availability');
+      document.querySelector('.manager-access').open = false;
+    } catch(e) {
+      $('msg').textContent = 'Nuk u hap java e re: ' + e.message;
+      $('msg').className = 'message warn';
+    } finally {
+      button.disabled = false;
+    }
   });
 
-  async function init() {
-    if(!validConfig()){
-      setStatus('Setup required: add your Supabase URL and key.',false);
-      $('availabilityMsg').textContent='Open index.html and replace the two Supabase configuration placeholders near the top of the script.';
-      $('make').disabled=true;return;
+  $('clear').addEventListener('click',async()=>{
+    if (!isManager || !window.confirm('A dëshiron t’i pastrosh shënimet e të gjithë punonjësve?')) {
+      return;
     }
-    if(!window.supabase){setStatus('Could not load Supabase client.',false);return;}
-    client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+
     try {
+      await invoke('clearAvailability');
+
+      $('availabilityMsg').textContent =
+        'Shënimet e disponueshmërisë u pastruan.';
+
+      $('availabilityMsg').className = 'message ok';
+
       await refreshState();
-      setStatus('Connected · live updates enabled',true);
-      channel=client.channel('weekly-schedule-live')
-        .on('postgres_changes',{event:'UPDATE',schema:'public',table:'weekly_schedule_state',filter:'id=eq.1'},payload=>{
-          if(payload.new?.state)applyState({...payload.new.state,updated_at:payload.new.updated_at});
-          setStatus('Connected · live updates enabled',true);
-        })
-        .subscribe(status=>{
-          if(status==='SUBSCRIBED')setStatus('Connected · live updates enabled',true);
-          else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')setStatus('Live updates interrupted; trying to reconnect…',false);
-        });
     } catch(e) {
-      setStatus('Could not connect to shared schedule.',false);
-      $('availabilityMsg').textContent='Connection error: '+e.message;
-      $('availabilityMsg').className='message warn';
+      $('availabilityMsg').textContent =
+        'Shënimet nuk u pastruan: ' + e.message;
+
+      $('availabilityMsg').className = 'message warn';
+    }
+  });
+
+  $('managerPin').addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+
+    if (!$('managerLogin').disabled) {
+      $('managerLogin').click();
     }
   }
-  drawAvail();drawSchedule();init();
+}); 
+
+  // Hyrja e menaxherit.
+  $('managerLogin').addEventListener('click',async()=>{
+    const pin = $('managerPin').value.trim();
+
+    if (!pin) {
+      $('managerMsg').textContent = 'Shkruaj fjalëkalimin e menaxherit.';
+      $('managerMsg').className = 'message warn';
+      return;
+    }
+
+
+    managerPin = pin;
+
+    try {
+      const data = await invoke('managerCheck');
+
+      if (!data.manager) {
+        throw new Error('Fjalëkalimi nuk është i saktë.');
+      }
+
+      isManager = true;
+
+      $('managerStatus').textContent = 'Je i kyçur si menaxher.';
+      $('managerMsg').textContent =
+        'Hyrja u krye me sukses. Tani mund ta menaxhosh orarin.';
+
+      $('managerMsg').className = 'message ok';
+
+      $('managerLogin').classList.add('hidden');
+      $('managerLogout').classList.remove('hidden');
+      $('showChangePin').classList.remove('hidden');
+
+      $('managerPin').disabled = true;
+
+      // Formulari i ndryshimit të fjalëkalimit nuk hapet automatikisht.
+      $('changePinForm').classList.add('hidden');
+
+      drawAvail();
+    } catch(e) {
+      managerPin = '';
+      isManager = false;
+
+      $('managerStatus').textContent = 'Paneli i menaxherit është i mbyllur.';
+      $('managerMsg').textContent =
+        'Hyrja dështoi. Kontrollo fjalëkalimin dhe provo përsëri.';
+
+      $('managerMsg').className = 'message warn';
+
+      $('managerPin').value = '';
+      $('managerPin').disabled = false;
+
+      $('managerLogin').classList.remove('hidden');
+      $('managerLogout').classList.add('hidden');
+      $('showChangePin').classList.add('hidden');
+
+      drawAvail();
+      drawSchedule();
+    }
+  });
+
+  // Dalja nga paneli i menaxherit.
+  $('managerLogout').addEventListener('click',()=>{
+    managerPin = '';
+    isManager = false;
+
+    $('managerPin').value = '';
+    $('managerPin').disabled = false;
+
+    $('changePinForm').classList.add('hidden');
+    $('newManagerPin').value = '';
+    $('confirmManagerPin').value = '';
+
+    $('changePinMsg').textContent = '';
+    $('changePinMsg').className = 'message';
+
+    $('managerLogin').classList.remove('hidden');
+    $('managerLogout').classList.add('hidden');
+    $('showChangePin').classList.add('hidden');
+
+    $('managerStatus').textContent = 'Paneli i menaxherit është i mbyllur.';
+    $('managerMsg').textContent =
+      'Ke dalë nga paneli i menaxherit. Punonjësit mund të vazhdojnë të shënojnë disponueshmërinë.';
+
+    $('managerMsg').className = 'message';
+
+    draftResult = null;
+    drawAvail();
+    drawSchedule();
+  });
+
+  // Shfaq ose fshih formularin e ndryshimit të fjalëkalimit.
+  $('showChangePin').addEventListener('click',()=>{
+    if (!isManager) return;
+    const form = $('changePinForm');
+    const isHidden = form.classList.contains('hidden');
+
+    form.classList.toggle('hidden',!isHidden);
+
+    $('changePinMsg').textContent = '';
+    $('changePinMsg').className = 'message';
+
+    if (isHidden) $('newManagerPin').focus();
+  });
+
+  $('cancelChangePin').addEventListener('click',()=>{
+    $('changePinForm').classList.add('hidden');
+
+    $('newManagerPin').value = '';
+    $('confirmManagerPin').value = '';
+
+    $('changePinMsg').textContent = '';
+    $('changePinMsg').className = 'message';
+  });
+
+  // Ndryshimi i fjalëkalimit funksionon edhe kur menaxheri nuk është i kyçur.
+  $('changeManagerPin').addEventListener('click',async()=>{
+    if (!isManager || !managerPin) {
+      $('changePinMsg').textContent = 'Kyçu si menaxher për ta ndryshuar fjalëkalimin.';
+      $('changePinMsg').className = 'message warn';
+      return;
+    }
+    const currentPin = managerPin;
+    const newPin = $('newManagerPin').value;
+    const confirmPin = $('confirmManagerPin').value;
+
+    const msg = $('changePinMsg');
+    const button = $('changeManagerPin');
+
+    msg.textContent = '';
+    msg.className = 'message';
+
+    if (newPin.length < 8 || newPin.length > 128) {
+      msg.textContent = 'Fjalëkalimi i ri duhet të ketë 8 deri në 128 karaktere.';
+      msg.className = 'message warn';
+      return;
+    }
+
+    if (newPin !== confirmPin) {
+      msg.textContent = 'Fjalëkalimet e reja nuk përputhen.';
+      msg.className = 'message warn';
+      return;
+    }
+
+    if (currentPin === newPin) {
+      msg.textContent = 'Fjalëkalimi i ri duhet të jetë ndryshe nga ai aktual.';
+      msg.className = 'message warn';
+      return;
+    }
+
+    if (!window.confirm('A dëshiron ta ndryshosh fjalëkalimin e menaxherit?')) {
+      return;
+    }
+
+    button.disabled = true;
+
+    try {
+      await invoke('changeManagerPin',{
+        managerPin:currentPin,
+        newManagerPin:newPin
+      });
+
+      // Nëse menaxheri është i kyçur, përditëso fjalëkalimin aktiv.
+      // Nëse nuk është i kyçur, mos e kyç automatikisht pas ndryshimit.
+      if (isManager) {
+        managerPin = newPin;
+        $('managerPin').value = newPin;
+      }
+
+        $('newManagerPin').value = '';
+      $('confirmManagerPin').value = '';
+
+      msg.textContent = 'Fjalëkalimi u ndryshua me sukses!';
+      msg.className = 'message ok';
+    } catch(e) {
+      msg.textContent =
+        'Ndryshimi dështoi. Kontrollo lidhjen dhe provo përsëri.';
+
+      msg.className = 'message warn';
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  $('print').addEventListener('click',()=>window.print());
+
+  $('csv').addEventListener('click',()=>{
+    if (!result) {
+      window.alert('Nuk ka orar për eksportim.');
+      return;
+    }
+
+    const rows = [
+      ['Lokali', shopName],
+      ['Java', weekPeriod(weekStart)],
+      [],
+      ['Dita','Data',...SHIFTS],
+      ...DAYS.map((d,di)=>[
+        d, dateForDay(weekStart, di),
+        ...result[di].map(p=>p<0?'Pa caktim':names[p])
+      ])
+    ];
+
+    const csv = rows
+      .map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','))
+      .join('\r\n');
+
+    const blob = new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+
+    a.href = url;
+    a.download = 'orari-javor.csv';
+    a.click();
+
+    URL.revokeObjectURL(url);
+  });
+
+  document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    show(tab.dataset.view);
+  });
+});
+
+  async function init() {
+    $('weekStart').value = toISODate(mondayOf());
+    if (!validConfig()) {
+      setStatus('Kërkohet konfigurimi i projektit.',false);
+
+      $('availabilityMsg').textContent =
+        'Kontrollo adresën dhe çelësin publik të Supabase në kod.';
+
+      $('make').disabled = true;
+      return;
+    }
+
+    if (!window.supabase) {
+      setStatus('Biblioteka Supabase nuk u ngarkua.',false);
+      return;
+    }
+
+    client = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    try {
+      await refreshState();
+
+      setStatus('Lidhja u krye · përditësimet e drejtpërdrejta janë aktive',true);
+
+      channel = client.channel('weekly-schedule-live')
+        .on(
+          'postgres_changes',
+          {
+            event:'UPDATE',
+            schema:'public',
+            table:'weekly_schedule_state',
+            filter:'id=eq.1'
+          },
+          payload=>{
+            if (payload.new?.state) {
+              applyState({
+                ...payload.new.state,
+                updated_at:payload.new.updated_at
+              });
+            }
+
+            setStatus(
+              'Lidhja u krye · përditësimet e drejtpërdrejta janë aktive',
+              true
+            );
+          }
+        )
+        .subscribe(status=>{
+          if (status === 'SUBSCRIBED') {
+            setStatus(
+              'Lidhja u krye · përditësimet e drejtpërdrejta janë aktive',
+              true
+            );
+          } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+            setStatus(
+              'Përditësimet e drejtpërdrejta u ndërprenë; po provohet rilidhja...',
+              false
+            );
+          }
+        });
+    } catch(e) {
+      setStatus('Lidhja me orarin e përbashkët dështoi.',false);
+
+      $('availabilityMsg').textContent =
+        'Gabim gjatë lidhjes. Rifresko faqen ose kontrollo konfigurimin e Supabase.';
+
+      $('availabilityMsg').className = 'message warn';
+    }
+  }
+
+    drawAvail();
+  drawSchedule();
+  init();
 })();
 </script>
 </body>
