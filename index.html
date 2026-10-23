@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly Shift Schedule</title>
+<style>
+:root{--green:#26734d;--pale:#e9f5ed;--ink:#202923;--muted:#68736c;--line:#e3e9e4;--bg:#f7f9f7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 18px 48px}
+header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}
+h1{font-size:28px;letter-spacing:-.7px;margin:0}header p{color:var(--muted);margin:5px 0 0}
+.tabs{display:flex;gap:8px;margin:20px 0 14px}.tab,button{font:inherit;cursor:pointer}
+.tab{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 14px;color:var(--muted);font-weight:650}
+.tab.active{background:var(--green);border-color:var(--green);color:#fff}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:17px;margin-bottom:14px}
+.panelhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+h2{font-size:17px;margin:0}.hint{font-size:12px;color:var(--muted);margin:4px 0 0}
+.scroll{overflow-x:auto;max-width:100%;border:1px solid var(--line);border-radius:9px;-webkit-overflow-scrolling:touch}
+.avail{border-collapse:separate;border-spacing:0;width:100%;min-width:760px;table-layout:fixed}
+.avail th,.avail td{padding:8px 4px;border-bottom:1px solid var(--line);border-right:1px solid #edf1ed;text-align:center;overflow-wrap:anywhere}
+.avail th{background:#f3f6f3;color:#536159;font-size:11px;font-weight:700;white-space:nowrap}
+.avail thead tr:first-child th{background:#eaf0eb;color:#34483b;font-size:12px;padding:11px 6px}
+.avail tbody tr:nth-child(even) td{background:#fbfcfb}.avail tbody tr:hover td{background:#f3f8f4}
+.avail th:first-child,.avail td:first-child{border-right:1px solid #dce5de;width:75px}
+.avail th:nth-child(2),.avail td:nth-child(2){width:95px}
+.avail td{height:48px}.avail th:first-child,.avail td:first-child{background:#f5f8f5;text-align:left;font-weight:650}
+.avail tr:last-child td{border-bottom:0}.avail th:last-child,.avail td:last-child{border-right:0}
+.name{width:100%;min-width:0;border:1px solid transparent;border-radius:6px;padding:6px 2px;background:transparent;font-size:12px;text-align:center;font-weight:650;color:var(--ink)}
+.name:hover{background:#f3f7f3}.name:focus{background:#fff;outline:1px solid #91c4a2}
+.mark{width:28px;height:28px;max-width:100%;border:1px solid #d7e0d8;border-radius:7px;background:#fff;color:#fff;font-weight:800;transition:background .12s,border-color .12s}
+.mark.on{box-shadow:0 1px 2px #17482d18;background:var(--green);border-color:var(--green)}
+.mark:hover{border-color:var(--green)}.daystart{border-left:2px solid #dce5de!important}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.btn{border:1px solid var(--line);border-radius:8px;background:#fff;padding:9px 13px;font-weight:650}
+.btn.primary{background:var(--green);color:#fff;border-color:var(--green)}.btn:hover{filter:brightness(.98)}
+.hidden{display:none!important}
+.schedule{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;min-width:0}
+.schedule th,.schedule td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left}
+.schedule th{font-size:12px;color:#536159;letter-spacing:.02em;background:#f1f5f1;font-weight:750}
+.schedule td{height:54px}.schedule tbody tr:nth-child(even) td{background:#fbfcfb}.schedule tbody tr:hover td{background:#f3f8f4}
+.schedule th:first-child{border-radius:7px 0 0 0}.schedule th:last-child{border-radius:0 7px 0 0}
+.schedule tr:last-child td{border-bottom:0}.schedule td:first-child{font-weight:700}
+.schedule small{display:block;font-weight:400;color:var(--muted);margin-top:3px}
+.uncovered{color:#b23c36;font-weight:700}.message{font-size:13px;color:var(--muted);margin:12px 0 0}
+.message.warn{color:#a23b32}.message.ok{color:var(--green)}.empty{text-align:center;padding:22px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:#9aa59d}.dot.live{background:#26734d}
+.adminbox{border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:12px;background:#fbfcfb}
+.adminbox label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+.adminbox input{font:inherit;padding:9px;border:1px solid var(--line);border-radius:7px;max-width:260px;width:100%}
+@media(max-width:600px){
+.wrap{padding:16px 8px 28px}header{margin-bottom:14px}h1{font-size:23px}.panel{padding:10px}.panelhead{align-items:flex-start;gap:8px}
+.tabs{gap:6px;margin:14px 0 10px}.tab{flex:1;padding:9px 6px;font-size:12px}.hint{font-size:11px}
+.avail{min-width:760px;table-layout:fixed}.avail th,.avail td{padding:6px 4px;font-size:11px}
+.avail th:first-child,.avail td:first-child{width:75px}.avail th:nth-child(2),.avail td:nth-child(2){width:95px}
+.name{font-size:11px;padding:5px 2px}.mark{width:28px;height:28px}
+.schedule{width:100%;min-width:0;table-layout:fixed}.schedule th,.schedule td{padding:10px 5px;font-size:11px;overflow-wrap:anywhere;word-break:normal}
+.schedule th:first-child,.schedule td:first-child{width:23%}.schedule th:not(:first-child),.schedule td:not(:first-child){width:25.66%}
+.schedule td{height:48px}.actions{gap:6px}.btn{padding:8px 9px;font-size:12px}
+}
+@media print{
+body{background:#fff}.tabs,#availability,.panelhead .btn,.actions,#adminbox,#connectionStatus{display:none!important}
+#schedule{display:block!important}.wrap{max-width:none;padding:0}.panel{border:0;padding:0}.scroll{overflow:visible;border:0}
+.schedule th,.schedule td{padding:10px}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header><div><h1>Weekly Shift Schedule</h1><p>Monday–Sunday · 3 shifts per day</p><div class="status" id="connectionStatus"><span class="dot" id="statusDot"></span><span id="statusText">Connecting to shared schedule…</span></div></div></header>
+<nav class="tabs">
+<button class="tab active" data-view="availability">Availability</button>
+<button class="tab" data-view="schedule">Weekly schedule</button>
+</nav>
+<section id="availability">
+<div class="panel">
+<div class="panelhead"><div><h2>Team availability</h2><p class="hint">Click a box to mark availability. Empty means unavailable.</p></div><button class="btn" id="clear" disabled>Clear marks</button></div>
+<div class="scroll"><table class="avail"><thead id="ah"></thead><tbody id="ab"></tbody></table></div>
+<div class="actions"><button class="btn primary" id="make" disabled>Generate schedule</button></div>
+<p class="message" id="availabilityMsg">Connecting…</p>
+<div class="adminbox" id="adminbox">
+<strong>Manager access</strong>
+<p class="hint">Enter the manager PIN to edit names, clear all marks, or generate and publish the schedule.</p>
+<label for="managerPin">Manager PIN</label>
+<input id="managerPin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter manager PIN">
+<div class="actions"><button class="btn" id="managerLogin">Unlock manager controls</button><button class="btn hidden" id="managerLogout">Lock manager controls</button></div>
+<p class="message" id="managerMsg">Availability marks are open to anyone with the link. Do not use this link as identity verification.</p>
+</div>
+</div>
+</section>
+<section id="schedule" class="hidden">
+<div class="panel">
+<div class="panelhead"><div><h2>Weekly schedule</h2><p class="hint">Published schedule shared with everyone.</p></div><button class="btn primary manager-only hidden" id="regen">Generate and publish</button></div>
+<div class="scroll"><table class="schedule"><thead><tr><th>Day</th><th>10:00–14:00</th><th>14:00–18:00</th><th>18:00–22:00</th></tr></thead><tbody id="sb"></tbody></table></div>
+<p class="message" id="msg">No schedule has been published yet.</p>
+<div class="actions"><button class="btn" id="print">Print schedule</button><button class="btn" id="csv">Export CSV</button><button class="btn" id="back">Edit availability</button></div>
+</div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+  // STEP 1: Replace both values with your Supabase project's URL and publishable/anon key.
+ const SUPABASE_URL = "https://qyhjrxfosipeurdkvisw.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_EmpRjIWvLZf9cVhmTsUReQ_SH0i5ha9";
+const FUNCTION_NAME = "weekly-schedule";
+
+  const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const SHIFTS = ['10:00–14:00','14:00–18:00','18:00–22:00'];
+  const DEFAULT = ['Ardina','Drilon','Ermal','Iris','Luljeta','Valdrin'];
+  const blankAvailability = () => Array.from({length:6},()=>Array.from({length:7},()=>[false,false,false]));
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  let names = [...DEFAULT], av = blankAvailability(), result = null;
+  let managerPin = '', isManager = false, client = null, channel = null;
+  let stateLoaded = false, pending = false, lastUpdated = null;
+
+  function setStatus(text, live=false) {
+    $('statusText').textContent = text;
+    $('statusDot').classList.toggle('live', live);
+  }
+  function validConfig() {
+    return !SUPABASE_URL.includes('PASTE_') && !SUPABASE_PUBLISHABLE_KEY.includes('PASTE_');
+  }
+  function normalizedState(state) {
+    const safeNames = Array.isArray(state?.names) && state.names.length === 6
+      ? state.names.map((n,i)=>String(n || DEFAULT[i]).slice(0,50)) : [...DEFAULT];
+    const safeAv = blankAvailability();
+    if (Array.isArray(state?.av)) {
+      for (let p=0;p<6;p++) for (let d=0;d<7;d++) for (let s=0;s<3;s++) {
+        safeAv[p][d][s] = Boolean(state.av?.[p]?.[d]?.[s]);
+      }
+    }
+    let safeResult = null;
+    if (Array.isArray(state?.result) && state.result.length===7) {
+      safeResult = state.result.map(row => Array.from({length:3},(_,s)=>{
+        const v = Number(row?.[s]);
+        return Number.isInteger(v) && v>=0 && v<6 ? v : -1;
+      }));
+    }
+    return {names:safeNames,av:safeAv,result:safeResult,updated_at:state?.updated_at || null};
+  }
+  function applyState(raw) {
+    const state = normalizedState(raw);
+    names = state.names; av = state.av; result = state.result; lastUpdated = state.updated_at;
+    stateLoaded = true; drawAvail(); drawSchedule();
+    $('availabilityMsg').textContent = lastUpdated ? `Shared availability loaded. Last saved: ${new Date(lastUpdated).toLocaleString()}.` : 'Shared availability loaded.';
+  }
+  async function invoke(action, payload={}) {
+    if (!client) throw new Error('Add your Supabase project URL and publishable key in the HTML first.');
+    const body = { action, ...payload };
+    if (managerPin) body.managerPin = managerPin;
+    const {data,error} = await client.functions.invoke(FUNCTION_NAME,{body});
+    if (error) {
+      let message = error.message || 'Request failed.';
+      try { const ctx = error.context; if (ctx && typeof ctx.json==='function') { const detail=await ctx.json(); if(detail?.error) message=detail.error; } } catch {}
+      throw new Error(message);
+    }
+    if (!data?.ok) throw new Error(data?.error || 'Request failed.');
+    return data;
+  }
+  async function refreshState() {
+    const data = await invoke('getState');
+    if (data.state) applyState(data.state);
+  }
+  async function saveAvailability(p,d,s,value) {
+    if (pending) return;
+    pending = true;
+    try {
+      await invoke('setAvailability',{person:p,day:d,shift:s,value});
+      $('availabilityMsg').textContent = 'Availability saved and shared.';
+      $('availabilityMsg').className = 'message ok';
+    } catch(e) {
+      $('availabilityMsg').textContent = 'Could not save: ' + e.message;
+      $('availabilityMsg').className = 'message warn';
+      await refreshState().catch(()=>{});
+    } finally { pending = false; }
+  }
+  function drawAvail() {
+    let h='<tr><th>Day</th><th>Shift time</th>';
+    names.forEach((n,p)=>{
+      h += `<th>${isManager
+        ? `<input class="name" data-name="${p}" value="${esc(n)}" aria-label="Person ${p+1} name">`
+        : `<span>${esc(n)}</span>`}</th>`;
+    });
+    $('ah').innerHTML=h+'</tr>';
+    let b='';
+    DAYS.forEach((d,di)=>SHIFTS.forEach((shift,si)=>{
+      b+='<tr>';
+      if(si===0)b+=`<td rowspan="3">${d}</td>`;
+      b+=`<td>${shift}</td>`;
+      names.forEach((n,p)=>{
+        const on=Boolean(av[p]?.[di]?.[si]);
+        b+=`<td><button class="mark ${on?'on':''}" data-p="${p}" data-d="${di}" data-s="${si}" aria-label="${esc(n)} ${d} ${shift}" aria-pressed="${on}" ${!stateLoaded?'disabled':''}>${on?'✓':''}</button></td>`;
+      });
+      b+='</tr>';
+    }));
+    $('ab').innerHTML=b;
+    $('ab').querySelectorAll('.mark').forEach(el=>el.addEventListener('click',()=>{
+      const p=+el.dataset.p,d=+el.dataset.d,s=+el.dataset.s;
+      saveAvailability(p,d,s,!av[p][d][s]);
+    }));
+    if(isManager) $('ah').querySelectorAll('[data-name]').forEach(el=>el.addEventListener('change',async()=>{
+      const p=+el.dataset.name, name=el.value.trim()||DEFAULT[p];
+      try { await invoke('setName',{person:p,name}); }
+      catch(e) { $('managerMsg').textContent='Could not save name: '+e.message; $('managerMsg').className='message warn'; }
+    }));
+    $('clear').disabled=!isManager || !stateLoaded;
+    $('make').disabled=!isManager || !stateLoaded;
+    document.querySelectorAll('.manager-only').forEach(el=>el.classList.toggle('hidden',!isManager));
+  }
+  function generateSchedule() {
+    const slots=[];
+    for(let d=0;d<7;d++)for(let s=0;s<3;s++)slots.push({d,s});
+    slots.sort((a,b)=>
+      av.reduce((n,p)=>n+(p[a.d][a.s]?1:0),0)-av.reduce((n,p)=>n+(p[b.d][b.s]?1:0),0)||a.d-b.d||a.s-b.s
+    );
+    const assigned=Array.from({length:7},()=>[-1,-1,-1]);
+    const days=Array.from({length:6},()=>new Set()), counts=Array(6).fill(0);
+    for(const {d,s} of slots){
+      const candidates=names.map((_,p)=>p).filter(p=>av[p][d][s]&&!days[p].has(d));
+      candidates.sort((a,b)=>{
+        const score=p=>days[p].size*10+counts[p]*2-((d>0&&days[p].has(d-1)?1:0)+(d<6&&days[p].has(d+1)?1:0))*2;
+        return score(a)-score(b)||a-b;
+      });
+      if(candidates.length){const p=candidates[0];assigned[d][s]=p;days[p].add(d);counts[p]++;}
+    }
+    return assigned;
+  }
+  function drawSchedule() {
+    if(!result){
+      $('sb').innerHTML='<tr><td colspan="4" class="empty">No schedule has been published yet.</td></tr>';
+      $('msg').textContent='The manager can generate and publish a schedule after availability has been marked.';
+      $('msg').className='message';return;
+    }
+    let missing=0,b='';
+    DAYS.forEach((d,di)=>{
+      b+=`<tr><td>${d}</td>`;
+      SHIFTS.forEach((shift,si)=>{
+        const p=result[di][si];if(p<0)missing++;
+        b+=`<td>${p<0?'<span class="uncovered">Uncovered</span>':esc(names[p])}</td>`;
+      });b+='</tr>';
+    });
+    $('sb').innerHTML=b;
+    $('msg').textContent=missing?`${missing} shift${missing===1?' is':'s are'} uncovered because nobody available could be assigned. Update availability and generate again.`:'All shifts are covered.';
+    $('msg').className='message'+(missing?' warn':' ok');
+  }
+  function show(view) {
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===view));
+    $('availability').classList.toggle('hidden',view!=='availability');
+    $('schedule').classList.toggle('hidden',view!=='schedule');
+    if(view==='schedule')drawSchedule();
+  }
+  async function publishGenerated() {
+    if(!isManager)return;
+    const generated=generateSchedule();
+    try {
+      await invoke('publishSchedule',{result:generated});
+      $('availabilityMsg').textContent='Schedule generated and published for everyone.';
+      $('availabilityMsg').className='message ok';
+      show('schedule');
+    } catch(e) {
+      $('availabilityMsg').textContent='Could not publish schedule: '+e.message;
+      $('availabilityMsg').className='message warn';
+    }
+  }
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>show(t.dataset.view)));
+  $('make').addEventListener('click',publishGenerated);
+  $('regen').addEventListener('click',publishGenerated);
+  $('back').addEventListener('click',()=>show('availability'));
+  $('clear').addEventListener('click',async()=>{
+    if(!isManager||!confirm('Clear availability for all employees?'))return;
+    try { await invoke('clearAvailability'); $('availabilityMsg').textContent='All availability marks cleared.'; }
+    catch(e) { $('availabilityMsg').textContent='Could not clear marks: '+e.message; $('availabilityMsg').className='message warn'; }
+  });
+  $('managerLogin').addEventListener('click',async()=>{
+    const pin=$('managerPin').value.trim();
+    if(!pin){$('managerMsg').textContent='Enter your manager PIN.';return;}
+    managerPin=pin;
+    try {
+      const data=await invoke('managerCheck');
+      if(!data.manager){throw new Error('Manager PIN was not accepted.');}
+      isManager=true;
+      $('managerMsg').textContent='Manager controls unlocked in this tab.';
+      $('managerMsg').className='message ok';
+      $('managerLogin').classList.add('hidden');$('managerLogout').classList.remove('hidden');
+      $('managerPin').disabled=true;drawAvail();
+    } catch(e) {
+      managerPin='';isManager=false;
+      $('managerMsg').textContent=e.message;
+      $('managerMsg').className='message warn';
+    }
+  });
+  $('managerLogout').addEventListener('click',()=>{
+    managerPin='';isManager=false;$('managerPin').value='';$('managerPin').disabled=false;
+    $('managerLogin').classList.remove('hidden');$('managerLogout').classList.add('hidden');
+    $('managerMsg').textContent='Manager controls locked.';drawAvail();
+  });
+  $('print').addEventListener('click',()=>window.print());
+  $('csv').addEventListener('click',()=>{
+    if(!result)return;
+    const rows=[['Day',...SHIFTS],...DAYS.map((d,di)=>[d,...result[di].map(p=>p<0?'Uncovered':names[p])])];
+    const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+    const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='weekly-shift-schedule.csv';a.click();URL.revokeObjectURL(url);
+  });
+
+  async function init() {
+    if(!validConfig()){
+      setStatus('Setup required: add your Supabase URL and key.',false);
+      $('availabilityMsg').textContent='Open index.html and replace the two Supabase configuration placeholders near the top of the script.';
+      $('make').disabled=true;return;
+    }
+    if(!window.supabase){setStatus('Could not load Supabase client.',false);return;}
+    client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+    try {
+      await refreshState();
+      setStatus('Connected · live updates enabled',true);
+      channel=client.channel('weekly-schedule-live')
+        .on('postgres_changes',{event:'UPDATE',schema:'public',table:'weekly_schedule_state',filter:'id=eq.1'},payload=>{
+          if(payload.new?.state)applyState({...payload.new.state,updated_at:payload.new.updated_at});
+          setStatus('Connected · live updates enabled',true);
+        })
+        .subscribe(status=>{
+          if(status==='SUBSCRIBED')setStatus('Connected · live updates enabled',true);
+          else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')setStatus('Live updates interrupted; trying to reconnect…',false);
+        });
+    } catch(e) {
+      setStatus('Could not connect to shared schedule.',false);
+      $('availabilityMsg').textContent='Connection error: '+e.message;
+      $('availabilityMsg').className='message warn';
+    }
+  }
+  drawAvail();drawSchedule();init();
+})();
+</script>
+</body>
+</html>
