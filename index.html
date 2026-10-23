@@ -85,6 +85,18 @@ body{background:#fff}.tabs,#availability,.panelhead .btn,.actions,#adminbox,#con
 <p class="hint">Enter the manager PIN to edit names, clear all marks, or generate and publish the schedule.</p>
 <label for="managerPin">Manager PIN</label>
 <input id="managerPin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Enter manager PIN">
+
+<div id="changePinSection" class="hidden">
+  <input
+    id="newManagerPin"
+    type="password"
+    autocomplete="new-password"
+    placeholder="New manager password (8+ characters)"
+  >
+  <button class="btn" id="changeManagerPin">Change manager password</button>
+  <p id="changePinMsg" role="status"></p>
+</div>
+
 <div class="actions"><button class="btn" id="managerLogin">Unlock manager controls</button><button class="btn hidden" id="managerLogout">Lock manager controls</button></div>
 <p class="message" id="managerMsg">Availability marks are open to anyone with the link. Do not use this link as identity verification.</p>
 </div>
@@ -208,7 +220,7 @@ const FUNCTION_NAME = "weekly-schedule";
       catch(e) { $('managerMsg').textContent='Could not save name: '+e.message; $('managerMsg').className='message warn'; }
     }));
     $('clear').disabled=!isManager || !stateLoaded;
-    $('make').disabled=!isManager || !stateLoaded;
+    $('make').disabled=!stateLoaded;
     document.querySelectorAll('.manager-only').forEach(el=>el.classList.toggle('hidden',!isManager));
   }
   function generateSchedule() {
@@ -254,7 +266,12 @@ const FUNCTION_NAME = "weekly-schedule";
     if(view==='schedule')drawSchedule();
   }
   async function publishGenerated() {
-    if(!isManager)return;
+     if (!isManager) {
+      $('availabilityMsg').textContent =
+        'Manager only. Only the manager can generate and publish the weekly schedule. Please mark your availability and let the manager handle scheduling.';
+      $('availabilityMsg').className = 'message warn';
+      return;
+    }
     const generated=generateSchedule();
     try {
       await invoke('publishSchedule',{result:generated});
@@ -286,7 +303,9 @@ const FUNCTION_NAME = "weekly-schedule";
       $('managerMsg').textContent='Manager controls unlocked in this tab.';
       $('managerMsg').className='message ok';
       $('managerLogin').classList.add('hidden');$('managerLogout').classList.remove('hidden');
-      $('managerPin').disabled=true;drawAvail();
+      $('managerPin').disabled=true;
+$('changePinSection').classList.remove('hidden');
+drawAvail();
     } catch(e) {
       managerPin='';isManager=false;
       $('managerMsg').textContent=e.message;
@@ -295,9 +314,49 @@ const FUNCTION_NAME = "weekly-schedule";
   });
   $('managerLogout').addEventListener('click',()=>{
     managerPin='';isManager=false;$('managerPin').value='';$('managerPin').disabled=false;
+$('changePinSection').classList.add('hidden');
+$('newManagerPin').value='';
+$('changePinMsg').textContent='';
     $('managerLogin').classList.remove('hidden');$('managerLogout').classList.add('hidden');
     $('managerMsg').textContent='Manager controls locked.';drawAvail();
   });
+  
+  
+$('changeManagerPin').addEventListener('click', async () => {
+  const newPin = $('newManagerPin').value;
+
+  if (!isManager) {
+    $('changePinMsg').textContent = 'Unlock manager controls first.';
+    return;
+  }
+
+  if (newPin.length < 8 || newPin.length > 128) {
+    $('changePinMsg').textContent =
+      'Use a password between 8 and 128 characters.';
+    return;
+  }
+
+  if (!window.confirm('Change the manager password?')) return;
+
+  const button = $('changeManagerPin');
+  button.disabled = true;
+
+  try {
+    await invoke('changeManagerPin', { newManagerPin: newPin });
+
+    managerPin = newPin;
+    $('managerPin').value = newPin;
+    $('newManagerPin').value = '';
+    $('changePinMsg').textContent = 'Manager password changed successfully!';
+    $('changePinMsg').className = 'message ok';
+  } catch (e) {
+    $('changePinMsg').textContent = 'Could not change password: ' + e.message;
+    $('changePinMsg').className = 'message warn';
+  } finally {
+    button.disabled = false;
+  }
+});
+
   $('print').addEventListener('click',()=>window.print());
   $('csv').addEventListener('click',()=>{
     if(!result)return;
