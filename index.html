@@ -1008,7 +1008,7 @@
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./Orari javor i ndërrimeve_files/supabase-js@2"></script>
 <script>
 (() => {
   // Konfigurimi i projektit Supabase.
@@ -1688,11 +1688,9 @@ syncPublishedView();
         throw new Error('Fjalëkalimi nuk është i saktë.');
       }
 
-       isManager = true;
-localStorage.setItem('managerPin', pin);
+      isManager = true;
 
-$('managerStatus').textContent = 'Je i kyçur si menaxher.';
-
+      $('managerStatus').textContent = 'Je i kyçur si menaxher.';
       $('managerMsg').textContent =
         'Hyrja u krye me sukses. Tani mund ta menaxhosh orarin.';
 
@@ -1831,11 +1829,12 @@ $('managerStatus').textContent = 'Je i kyçur si menaxher.';
         newManagerPin:newPin
       });
 
-     if (isManager) {
-  managerPin = newPin;
-  localStorage.setItem('managerPin', newPin);
-  $('managerPin').value = newPin;
-}
+      // Nëse menaxheri është i kyçur, përditëso fjalëkalimin aktiv.
+      // Nëse nuk është i kyçur, mos e kyç automatikisht pas ndryshimit.
+      if (isManager) {
+        managerPin = newPin;
+        $('managerPin').value = newPin;
+      }
 
         $('newManagerPin').value = '';
       $('confirmManagerPin').value = '';
@@ -1892,77 +1891,6 @@ $('managerStatus').textContent = 'Je i kyçur si menaxher.';
   });
 });
 
-
-async function restoreManagerSession() {
-  const savedPin = localStorage.getItem('managerPin');
-
-  if (!savedPin) return;
-
-  managerPin = savedPin;
-
-  try {
-    const data = await invoke('managerCheck');
-
-    if (!data.manager) {
-      localStorage.removeItem('managerPin');
-      managerPin = '';
-      isManager = false;
-
-      $('managerStatus').textContent =
-        'Paneli i menaxherit është i mbyllur.';
-
-      $('managerMsg').textContent =
-        'Kyçu përsëri me fjalëkalimin e menaxherit.';
-
-      $('managerMsg').className = 'message warn';
-      $('managerPin').value = '';
-      $('managerPin').disabled = false;
-      $('managerLogin').classList.remove('hidden');
-      $('managerLogout').classList.add('hidden');
-      $('showChangePin').classList.add('hidden');
-
-      drawAvail();
-      drawSchedule();
-      return;
-    }
-
-    isManager = true;
-
-    $('managerStatus').textContent =
-      'Je i kyçur si menaxher.';
-
-    $('managerMsg').textContent =
-      'Sesioni i menaxherit u rikthye me sukses.';
-
-    $('managerMsg').className = 'message ok';
-    $('managerLogin').classList.add('hidden');
-    $('managerLogout').classList.remove('hidden');
-    $('showChangePin').classList.remove('hidden');
-    $('managerPin').value = savedPin;
-    $('managerPin').disabled = true;
-    $('changePinForm').classList.add('hidden');
-
-    drawAvail();
-    drawSchedule();
-
-  } catch (e) {
-    isManager = false;
-
-    $('managerStatus').textContent =
-      'Sesioni i menaxherit nuk u rikthye.';
-
-    $('managerMsg').textContent =
-      'Nuk u verifikua hyrja. Kontrollo lidhjen dhe provo përsëri.';
-
-    $('managerMsg').className = 'message warn';
-    $('managerPin').value = '';
-    $('managerPin').disabled = false;
-    $('managerLogin').classList.remove('hidden');
-    $('managerLogout').classList.add('hidden');
-    $('showChangePin').classList.add('hidden');
-  }
-}
-
   async function init() {
     $('weekStart').value = toISODate(mondayOf());
     if (!validConfig()) {
@@ -1985,11 +1913,10 @@ async function restoreManagerSession() {
       SUPABASE_PUBLISHABLE_KEY
     );
 
-  try {
-  await refreshState();
-  await restoreManagerSession();
+    try {
+      await refreshState();
 
-  setStatus('Lidhja u krye · përditësimet e drejtpërdrejta janë aktive',true);
+      setStatus('Lidhja u krye · përditësimet e drejtpërdrejta janë aktive',true);
 
       channel = client.channel('weekly-schedule-live')
         .on(
