@@ -733,138 +733,120 @@
     margin: 12mm;
   }
 
-  
-@media print {
-  @page {
-    size: auto;
-    margin: 10mm;
-  }
+  @media print {
+    body {
+      background: #fff !important;
+      color: #111 !important;
+      font-size: 11pt;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
 
-  html,
-  body {
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-    background: #fff !important;
-    color: #111 !important;
-    font-size: 11pt !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
+    body * {
+      visibility: hidden !important;
+    }
 
-  body * {
-    visibility: hidden !important;
-  }
+    #schedule,
+    #schedule * {
+      visibility: visible !important;
+    }
 
-  #schedule,
-  #schedule * {
-    visibility: visible !important;
-  }
+    #schedule {
+      display: block !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: #fff !important;
+    }
 
-  #schedule {
-    display: block !important;
-    position: static !important;
-    width: 100% !important;
-    max-width: none !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    overflow: visible !important;
-    background: #fff !important;
-    transform: none !important;
-  }
+    #schedule .panelhead .btn,
+    #schedule .actions,
+    #schedule .schedule-state,
+    #schedule .message,
+    #schedule .hint {
+      display: none !important;
+    }
 
-  #schedule .panelhead .btn,
-  #schedule .actions,
-  #schedule .schedule-state,
-  #schedule .message,
-  #schedule .hint {
-    display: none !important;
-  }
+    #schedule .shop-title {
+      margin: 0 0 5px !important;
+      color: #111 !important;
+      font-size: 22pt !important;
+    }
 
-  #schedule .shop-title {
-    margin: 0 0 5px !important;
-    color: #111 !important;
-    font-size: 22pt !important;
-  }
+    #schedule .schedule-period {
+      margin: 0 0 14px !important;
+      padding-bottom: 8px !important;
+      border-bottom: 1px solid #999 !important;
+      color: #333 !important;
+      font-size: 11pt !important;
+    }
 
-  #schedule .schedule-period {
-    margin: 0 0 14px !important;
-    padding-bottom: 8px !important;
-    border-bottom: 1px solid #999 !important;
-    color: #333 !important;
-    font-size: 11pt !important;
-  }
+    #schedule .scroll {
+      width: 100% !important;
+      max-width: none !important;
+      overflow: visible !important;
+      border: 1px solid #999 !important;
+      border-radius: 0 !important;
+    }
 
-  #schedule .scroll {
-    display: block !important;
-    width: 100% !important;
-    max-width: none !important;
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    border: 1px solid #999 !important;
-    border-radius: 0 !important;
-  }
+    #schedule .schedule {
+      width: 100% !important;
+      min-width: 0 !important;
+      table-layout: fixed !important;
+      border-collapse: collapse !important;
+      font-size: 10pt !important;
+    }
 
-  #schedule .schedule {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    table-layout: fixed !important;
-    border-collapse: collapse !important;
-    font-size: 10pt !important;
-  }
+    #schedule .schedule th,
+    #schedule .schedule td {
+      padding: 8px !important;
+      border: 1px solid #bbb !important;
+      color: #111 !important;
+      overflow-wrap: break-word !important;
+    }
 
-  #schedule .schedule th,
-  #schedule .schedule td {
-    padding: 6px !important;
-    border: 1px solid #bbb !important;
-    color: #111 !important;
-    overflow-wrap: anywhere !important;
-    word-break: normal !important;
-    white-space: normal !important;
-  }
+    #schedule .schedule th {
+      background: #eaf0eb !important;
+      font-size: 10pt !important;
+    }
 
-  #schedule .schedule th {
-    background: #eaf0eb !important;
-    font-size: 10pt !important;
-  }
+    #schedule .schedule td {
+      height: auto !important;
+      min-height: 0 !important;
+      background: #fff !important;
+    }
 
-  #schedule .schedule td {
-    height: auto !important;
-    min-height: 0 !important;
-    background: #fff !important;
-  }
+    #schedule .schedule small {
+      color: #444 !important;
+      font-size: 9pt !important;
+    }
 
-  #schedule .schedule small {
-    color: #444 !important;
-    font-size: 9pt !important;
-  }
+    #schedule .uncovered {
+      color: #111 !important;
+    }
 
-  #schedule .uncovered {
-    color: #111 !important;
-  }
+    #schedule .schedule tr {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
 
-  #schedule .schedule tr {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
+    html,
+    body,
+    .wrap {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+    }
   }
-
-  .wrap {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-  }
-}
-
 </style>
 
 </head>
@@ -1397,11 +1379,6 @@ $('print').classList.toggle(
   !scheduleToDraw || showingDraft
 );
 
-$('print').onclick = () => {
-  alert('Butoni Printo po funksionon.');
-  window.print();
-};
-
 // CSV shfaqet vetëm për ekipin
 $('csv').classList.toggle(
   'hidden',
@@ -1463,7 +1440,6 @@ $('scheduleSetup').classList.toggle('hidden', !isManager);
   }
 
   
-
 function syncPublishedView() {
   const published = Array.isArray(result) && result.length === 7;
 
@@ -1479,19 +1455,7 @@ function syncPublishedView() {
 
   // Përditëso butonat sa herë që sinkronizohet pamja
   drawSchedule();
-
-  // Regjistro veprimin e printimit vetëm një herë
- const printButton = $('print');
-
-if (printButton && !printButton.dataset.printBound) {
-  printButton.dataset.printBound = 'true';
-
-  printButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    window.print();
-  });
 }
-
 
   
 function show(view) {
@@ -1888,17 +1852,7 @@ $('managerStatus').textContent = 'Je i kyçur si menaxher.';
     }
   });
 
-  $('print').addEventListener('click', (event) => {
-  event.preventDefault();
-  window.print();
-});
-  try {
-    window.print();
-  } catch (error) {
-    console.error('Gabim gjatë printimit:', error);
-    setStatus('Printimi nuk mund të hapet në këtë pajisje.', false);
-  }
-});
+  $('print').addEventListener('click',()=>window.print());
 
   $('csv').addEventListener('click',()=>{
     if (!result) {
